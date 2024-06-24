@@ -1,0 +1,39 @@
+---
+import { cva } from "class-variance-authority";
+
+import type { HTMLAttributes } from "astro/types";
+import type { VariantProps } from "class-variance-authority";
+
+const button = cva(
+  "inline-flex items-center justify-center font-bold ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-primary-light dark:focus-visible:ring-slate-300",
+  {
+    variants: {
+      variant: {
+        primary:
+          "bg-primary-light text-light-200 hover:bg-primary-light/90 dark:bg-primary-dark dark:hover:bg-primary-dark/90",
+        secondary:
+          "bg-light-300 text-dark-100 hover:bg-light-300/80 dark:bg-dark-200 dark:text-light-100 dark:hover:bg-dark-200/80",
+        outline:
+          "border-2 border-primary-light bg-light-200 text-primary-light hover:bg-primary-light hover:text-light-200 dark:border-primary-dark dark:bg-dark-200 dark:text-primary-dark dark:hover:bg-primary-dark dark:hover:text-light-200",
+        link: "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
+        categories: "gap-x-1.5 px-[19px] text-xl dark:text-light-400",
+        tableOfContent: "pl-4 text-sm",
+      },
+      size: {
+        large: "rounded-lg px-7 py-5 text-2xl",
+        medium: "rounded-lg px-5 py-2.5",
+        small: "rounded-[1px] p-1.5",
+      },
+    },
+    compoundVariants: [{ variant: "primary", size: "medium", class: "uppercase" }],
+  },
+);
+
+type Props = HTMLAttributes<"button"> & VariantProps<typeof button>;
+
+const { variant = "primary", size = "medium", ...props } = Astro.props;
+---
+
+<button {...props} class={button({ variant, size })} onclick="">
+  <slot />
+</button>

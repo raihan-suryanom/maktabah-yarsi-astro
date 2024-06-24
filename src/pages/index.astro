@@ -1,16 +1,16 @@
 ---
-import Test from '../components/Test';
-import Layout from '../layouts/Layout.astro';
+import Button from "../components/Button.astro";
+import Test from "../components/Test";
+import Layout from "../layouts/Layout.astro";
 
-export const prerender = false;
+// export const prerender = false;
 
 if (Astro.request.method === "POST") {
   try {
     const data = await Astro.request.formData();
-	console.log(data)
+    console.log(data);
     // const year = data.get("year");
     // const type = data.get("type");
-
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
@@ -20,78 +20,78 @@ if (Astro.request.method === "POST") {
 ---
 
 <Layout title="Welcome to Astro.">
-	<button id="openModal">Open the modal</button>
-
-<dialog id="modal" class="modal">
-	<form method="post" class="flex flex-col gap-y-5">
-		<label for="year">
-		  Year:
-		  <input
-			class="border-2 block border-black"
-			name="year"
-			type="number"
-			pattern="/^-?\d+\.?\d*$/"
-			min="2017"
-			required
-			placeholder="Competition Year"
-		  />
-		</label>
-		<button type="submit">Submit</button>
-    <Test client:visible/>
-  <button id="closeModal" class="modal-close-btn">Close</button>
-  <p>Test Modal</p>
-</dialog>
+  <Button id="openModal">Open The Modal</Button>
+  <dialog id="modal" class="modal">
+    <form method="post" class="flex flex-col gap-y-5" action="/">
+      <label for="year">
+        Year:
+        <input
+          class="border-2 block border-black"
+          name="year"
+          type="number"
+          pattern="/^-?\d+\.?\d*$/"
+          min="2017"
+          required
+          placeholder="Competition Year"
+        />
+      </label>
+      <button type="submit">Submit</button>
+    </form>
+    <Test client:visible />
+    <button id="closeModal" class="modal-close-btn">Close</button>
+    <p>Test Modal</p>
+  </dialog>
+  <Button>Test</Button>
 </Layout>
 
-<script is:inline>
-	if (window.history.replaceState) {
+<script>
+  if (window.history.replaceState) {
     window.history.replaceState(null, "", window.location.href);
   }
 
-	const dialog = document.getElementById('modal');
-const openDialogButton = document.getElementById('openModal');
-const closeDialogButton = document.getElementById('closeModal');
+  const dialog = document.getElementById("modal") as HTMLDialogElement;
+  const openDialogButton = document.getElementById(
+    "openModal",
+  ) as HTMLButtonElement;
+  const closeDialogButton = document.getElementById(
+    "closeModal",
+  ) as HTMLButtonElement;
 
-openDialogButton.addEventListener('click', () => {
-  dialog.showModal();
-});
-
-closeDialogButton.addEventListener('click', () => {
-  dialog.close();
-});
+  openDialogButton.addEventListener("click", () => dialog.showModal());
+  closeDialogButton.addEventListener("click", () => dialog.close());
 </script>
 
 <style>
-	.modal {
-  position: relative;
-  max-width: 20rem;
-  padding: 2rem;
-  border: 0;
-  border-radius: 0.5rem;
-  box-shadow: 0 0 0.5rem 0.25rem hsl(0 0% 0% / 10%);
-}
+  .modal {
+    position: relative;
+    max-width: 20rem;
+    padding: 2rem;
+    border: 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.5rem 0.25rem hsl(0 0% 0% / 10%);
+  }
 
-.modal-close-btn {
-  font-size: .75em;
-  position: absolute;
-  top: .25em;
-  right: .25em;
-}
+  .modal-close-btn {
+    font-size: 0.75em;
+    position: absolute;
+    top: 0.25em;
+    right: 0.25em;
+  }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-button {
-  padding: 0.5em;
-  font: inherit;
-  line-height: 1;
-}
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  button {
+    padding: 0.5em;
+    font: inherit;
+    line-height: 1;
+  }
 
-button {
-  cursor: pointer;
-}
+  button {
+    cursor: pointer;
+  }
 
-.modal::backdrop {
-  background: hsl(0 0% 0% / 50%);
-}
+  .modal::backdrop {
+    background: hsl(0 0% 0% / 50%);
+  }
 </style>
