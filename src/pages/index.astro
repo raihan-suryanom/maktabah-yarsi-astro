@@ -1,51 +1,15 @@
 ---
 import Button from "../components/Button.astro";
-import Modal from "../components/Modal";
-import Test from "../components/Test";
+import Modal from "../components/Modal.astro";
+import Select from "../components/Select";
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Welcome to Astro.">
-  <Modal client:load>
+  <Modal>
     <form>
-      <Button type='submit'>
-        Test
-      </Button>
-      <Test client:visible />
+      <Button type="submit">Test</Button>
+      <Select client:visible />
     </form>
   </Modal>
 </Layout>
-<style>
-  .modal {
-    position: relative;
-    max-width: 20rem;
-    padding: 2rem;
-    border: 0;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 0.5rem 0.25rem hsl(0 0% 0% / 10%);
-  }
-
-  .modal-close-btn {
-    font-size: 0.75em;
-    position: absolute;
-    top: 0.25em;
-    right: 0.25em;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  button {
-    padding: 0.5em;
-    font: inherit;
-    line-height: 1;
-  }
-
-  button {
-    cursor: pointer;
-  }
-
-  .modal::backdrop {
-    background: hsl(0 0% 0% / 50%);
-  }
-</style>

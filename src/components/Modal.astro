@@ -1,32 +1,24 @@
 ---
-import type { HTMLAttributes } from "astro/types";
-import type { ReactNode } from "react";
-
+import Button from "./Button.astro";
 ---
-<button id="modal-open-btn">OPEN THE MODALLLL</button>
-<div id=""></div>
 
-<!-- <astro-greet data-content={content} >
-</astro-greet> -->
-<!-- {
-  showModal && (
-    <div class="modal">
-      <slot id="modal-content" />
-      <button class="modal-close-btn">Close</button>
-    </div>
-  )
-} -->
-<!-- <script define:vars={{ showModal }}>
-  const modalContent = document.getElementById("modal-content");
-  const openModalButton = document.getElementById("modal-open-btn");
-</script> -->
+<dialog>
+  <button>Close</button>
+  <slot />
+</dialog>
+<Button>OPEN THE MODALLLL</Button>
+
 <script>
-    const x = Astro.slots.has('default')
-    console.log(x)
-  </script>
+  const showButton = document.querySelector("dialog + button")!;
+  const closeButton = document.querySelector("dialog > button")!;
+  const dialog = document.querySelector("dialog")!;
+
+  showButton.addEventListener("click", () => dialog.showModal());
+  closeButton.addEventListener("click", () => dialog.close());
+</script>
 
 <style>
-  .modal {
+  dialog {
     position: relative;
     max-width: 20rem;
     padding: 2rem;
@@ -35,14 +27,14 @@ import type { ReactNode } from "react";
     box-shadow: 0 0 0.5rem 0.25rem hsl(0 0% 0% / 10%);
   }
 
-  .modal-close-btn {
+  dialog::backdrop {
+    background: hsl(0 0% 0% / 50%);
+  }
+
+  dialog > button {
     font-size: 0.75em;
     position: absolute;
     top: 0.25em;
     right: 0.25em;
-  }
-
-  .modal::backdrop {
-    background: hsl(0 0% 0% / 50%);
   }
 </style>
