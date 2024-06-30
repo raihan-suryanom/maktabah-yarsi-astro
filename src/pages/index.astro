@@ -1,66 +1,20 @@
 ---
 import Button from "../components/Button.astro";
+import Modal from "../components/Modal";
 import Test from "../components/Test";
 import Layout from "../layouts/Layout.astro";
-
-// export const prerender = false;
-
-if (Astro.request.method === "POST") {
-  try {
-    const data = await Astro.request.formData();
-    console.log(data);
-    // const year = data.get("year");
-    // const type = data.get("type");
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
-  }
-}
 ---
 
 <Layout title="Welcome to Astro.">
-  <Button id="openModal">Open The Modal</Button>
-  <dialog id="modal" class="modal">
-    <form method="post" class="flex flex-col gap-y-5" action="/">
-      <label for="year">
-        Year:
-        <input
-          class="border-2 block border-black"
-          name="year"
-          type="number"
-          pattern="/^-?\d+\.?\d*$/"
-          min="2017"
-          required
-          placeholder="Competition Year"
-        />
-      </label>
-      <button type="submit">Submit</button>
+  <Modal client:load>
+    <form>
+      <Button type='submit'>
+        Test
+      </Button>
+      <Test client:visible />
     </form>
-    <Test client:visible />
-    <button id="closeModal" class="modal-close-btn">Close</button>
-    <p>Test Modal</p>
-  </dialog>
-  <Button>Test</Button>
+  </Modal>
 </Layout>
-
-<script>
-  if (window.history.replaceState) {
-    window.history.replaceState(null, "", window.location.href);
-  }
-
-  const dialog = document.getElementById("modal") as HTMLDialogElement;
-  const openDialogButton = document.getElementById(
-    "openModal",
-  ) as HTMLButtonElement;
-  const closeDialogButton = document.getElementById(
-    "closeModal",
-  ) as HTMLButtonElement;
-
-  openDialogButton.addEventListener("click", () => dialog.showModal());
-  closeDialogButton.addEventListener("click", () => dialog.close());
-</script>
-
 <style>
   .modal {
     position: relative;

@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
-import Select from 'react-select'
+import Select from "./Select";
 
 const Test = () => {
-  const [first, setfirst] = useState([]);
-  return <div>
-    <p>Text</p>
-    <Select isMulti/>
-  </div>;
+
+  return (
+    <div>
+      <p>Text</p>
+      <Select isMulti />
+    </div>
+  );
 };
 
 export default Test;

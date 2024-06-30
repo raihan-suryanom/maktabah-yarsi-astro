@@ -1,0 +1,48 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { ReactNode } from "react";
+
+---
+<button id="modal-open-btn">OPEN THE MODALLLL</button>
+<div id=""></div>
+
+<!-- <astro-greet data-content={content} >
+</astro-greet> -->
+<!-- {
+  showModal && (
+    <div class="modal">
+      <slot id="modal-content" />
+      <button class="modal-close-btn">Close</button>
+    </div>
+  )
+} -->
+<!-- <script define:vars={{ showModal }}>
+  const modalContent = document.getElementById("modal-content");
+  const openModalButton = document.getElementById("modal-open-btn");
+</script> -->
+<script>
+    const x = Astro.slots.has('default')
+    console.log(x)
+  </script>
+
+<style>
+  .modal {
+    position: relative;
+    max-width: 20rem;
+    padding: 2rem;
+    border: 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.5rem 0.25rem hsl(0 0% 0% / 10%);
+  }
+
+  .modal-close-btn {
+    font-size: 0.75em;
+    position: absolute;
+    top: 0.25em;
+    right: 0.25em;
+  }
+
+  .modal::backdrop {
+    background: hsl(0 0% 0% / 50%);
+  }
+</style>
