@@ -42,8 +42,13 @@ export default {
         },
       }),
       fontFamily: {
-        lpmq: ["var(--font-lpmq)"],
-        poppins: ["var(--font-poppins)"],
+        lpmq: [
+          "LPMQ Isep Misbah",
+          "Traditional Arabic",
+          "Tahoma",
+          "sans-serif",
+        ],
+        poppins: ["Poppins", "sans-serif"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
