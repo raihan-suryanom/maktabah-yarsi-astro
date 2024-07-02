@@ -8,6 +8,7 @@
     "disable:toolbar": "astro preferences disable devToolbar",
     "build": "astro check && astro build",
     "fresh:install": "rm -rf node_modules && rm yarn.lock && yarn",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicon.svg",
     "preview": "yarn build && vercel deploy --prebuilt",
     "vercel:prod": "vercel --prod",
     "astro": "astro",
