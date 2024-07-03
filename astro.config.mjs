@@ -9,6 +9,7 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   output: "hybrid",
   adapter: vercel(),
+  prefetch: true,
   integrations: [
     react(),
     pwa({
@@ -21,7 +22,7 @@ export default defineConfig({
       includeAssets: ["favicon.svg", "favicon.ico", "lpmq.woff2"],
       registerType: "autoUpdate",
       manifest: {
-        name: "Maktabah YARSI",
+        name: "Maktabah YARSI | Perpustakaan Islam Digital Berbahasa Indonesia",
         short_name: "Maktabah YARSI",
         description:
           "Maktabah YARSI مكتبة يرسي merupakan aplikasi perpustakaan islam digital berbahasa Indonesia yang memungkinkan pengguna untuk mencari topik atau permasalah berdasarkan kata kunci seperti iman, sabar, shalat dan riba.",
@@ -38,7 +39,7 @@ export default defineConfig({
     tailwind(),
     icon({
       include: {
-        lucide: ["home"],
+        lucide: ["search"],
       },
     }),
   ],

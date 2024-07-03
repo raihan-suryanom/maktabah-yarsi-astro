@@ -1,0 +1,19 @@
+---
+import { cn } from "../utils/cn";
+
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div">;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<div
+  aria-label="skeleton"
+  class={cn(
+    "h-5 w-full animate-pulse rounded-sm bg-slate-300 dark:bg-slate-600",
+    className,
+  )}
+  {...props}
+>
+</div>

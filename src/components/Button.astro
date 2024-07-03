@@ -1,10 +1,12 @@
 ---
 import { cva } from "class-variance-authority";
 
+import { cn } from "../utils/cn";
+
 import type { HTMLAttributes } from "astro/types";
 import type { VariantProps } from "class-variance-authority";
 
-const button = cva(
+const buttonStyles = cva(
   "inline-flex items-center justify-center font-bold ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-primary-light dark:focus-visible:ring-slate-300",
   {
     variants: {
@@ -24,15 +26,21 @@ const button = cva(
         medium: "rounded-lg px-5 py-2.5",
         small: "rounded-[1px] p-1.5",
       },
-    }
+    },
   },
 );
 
-type Props = HTMLAttributes<"button"> & VariantProps<typeof button>;
+export type Props = HTMLAttributes<"button"> &
+  VariantProps<typeof buttonStyles>;
 
-const { variant = "primary", size = "medium", ...props } = Astro.props;
+const {
+  variant = "primary",
+  size = "medium",
+  class: className,
+  ...props
+} = Astro.props;
 ---
 
-<button {...props} class={button({ variant, size })} onclick="">
+<button {...props} class={cn(buttonStyles({ variant, size, className }))}>
   <slot />
 </button>
