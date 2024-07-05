@@ -1,0 +1,36 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { reverseSlugCaseToOriginal } from "../../lib/utils/helper";
+
+import type { CategoryProps, TOCProps } from "../../lib/utils/index.type";
+
+type Props = {
+  item: TOCProps | CategoryProps;
+  variant: "tableOfContents" | "categories";
+};
+const { variant, item } = Astro.props;
+---
+
+<summary
+  class="flex justify-between py-1 font-semibold capitalize leading-snug text-dark-100 dark:text-light-400"
+>
+  {
+    variant === "tableOfContents" ? (
+      <a
+        href={item.path}
+        class="inline w-auto text-left leading-snug hover:text-dark-100 dark:hover:text-light-400"
+        data-astro-prefetch
+      >
+        {item.title}
+      </a>
+    ) : (
+      reverseSlugCaseToOriginal(item.title)
+    )
+  }
+  <Icon
+    name="lucide:chevron-right"
+    class="ml-auto shrink-0 text-primary-light transition-transform duration-200 dark:text-primary-dark [&_path]:stroke-[2.5]"
+    size={20}
+  />
+</summary>

@@ -1,10 +1,10 @@
 ---
-import { cn } from "../utils/cn";
+import { cn } from "../lib/utils/cn";
 
 import type { HTMLAttributes } from "astro/types";
 
 type Props = HTMLAttributes<"div"> & {
-  orientation: "horizontal" | "vertical";
+  orientation?: "horizontal" | "vertical";
 };
 
 const { class: className, orientation = "horizontal", ...props } = Astro.props;

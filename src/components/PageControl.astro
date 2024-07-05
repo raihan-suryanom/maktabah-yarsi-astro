@@ -1,0 +1,78 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { cn } from "../lib/utils/cn";
+import Input from "./Input.astro";
+
+type Props = {
+  currentPage: string;
+  lastPage: number;
+  bibliographyId?: string;
+  firstPage?: number;
+  class?: string;
+};
+
+const {
+  currentPage,
+  lastPage,
+  bibliographyId,
+  firstPage = 1,
+  class: className,
+} = Astro.props;
+const bibliographies = "/bibliographies";
+
+const pageControlProps = (page: number, isDisabled: boolean) => ({
+  // TODO: make sure to remove this later
+  // ...(!bibliographyId && {
+  //   onClick: () => searchNavAction(page.toString()),
+  // }),
+  ...(bibliographyId &&
+    !isDisabled && {
+      href: `${bibliographies}/${bibliographyId}/${page}`,
+    }),
+  "data-astro-prefetch": "hover",
+});
+---
+
+<div
+  class={cn(
+    "mx-auto flex items-center gap-x-3 [&_a[aria-disabled=true]]:opacity-50",
+    className,
+  )}
+>
+  <a
+    class="text-primary-light dark:text-primary-dark/80 dark:hover:text-primary-dark"
+    aria-disabled={+currentPage === firstPage}
+    {...pageControlProps(firstPage, +currentPage === firstPage)}
+  >
+    <Icon name="lucide:chevrons-left" size={32} />
+  </a>
+
+  <a
+    class="text-primary-light dark:text-primary-dark/80 dark:hover:text-primary-dark"
+    aria-disabled={+currentPage === firstPage}
+    {...pageControlProps(+currentPage - 1, +currentPage === firstPage)}
+  >
+    <Icon name="lucide:chevron-left" size={32} />
+  </a>
+  <Input
+    type="number"
+    dimension="small"
+    class="w-8 appearance-none text-center text-sm"
+    value={currentPage}
+  />
+  <a
+    class="text-primary-light dark:text-primary-dark/80 dark:hover:text-primary-dark"
+    aria-disabled={+currentPage === lastPage}
+    {...pageControlProps(+currentPage + 1, +currentPage === lastPage)}
+  >
+    <Icon name="lucide:chevron-right" size={32} />
+  </a>
+  <a
+    class="text-primary-light dark:text-primary-dark/80 dark:hover:text-primary-dark"
+    aria-disabled={+currentPage === lastPage}
+    {...pageControlProps(lastPage, +currentPage === lastPage)}
+  >
+    <Icon name="lucide:chevrons-right" size={32} />
+  </a>
+</div>

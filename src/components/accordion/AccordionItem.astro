@@ -1,0 +1,56 @@
+---
+import { cn } from "../../lib/utils/cn";
+import Summary from "./Summary.astro";
+
+import type { CategoryProps, TOCProps } from "../../lib/utils/index.type";
+
+type Props = {
+  item: TOCProps | CategoryProps;
+  variant: "tableOfContents" | "categories";
+  activeItem: string;
+  open?: boolean;
+  class?: string;
+};
+
+const { item, variant, activeItem, open, class: className } = Astro.props;
+const hasChildren = item.children && item.children.length > 0;
+---
+
+{
+  !hasChildren ? (
+    <a
+      href={item.path}
+      class={cn(
+        "inline-block w-full rounded-md p-[0.3em_0.5em] text-left text-sm capitalize hover:text-dark-100 dark:hover:text-light-400",
+        ((item as TOCProps).page === +activeItem ||
+          (item as CategoryProps)._id === activeItem) &&
+          "text-primary-light hover:text-primary-light dark:text-primary-dark dark:hover:text-primary-dark",
+      )}
+      data-astro-prefetch
+    >
+      <span>{item.title}</span>
+    </a>
+  ) : (
+    <details
+      class={cn("[&[open]>summary>svg]:rotate-90", className)}
+      open={open}
+    >
+      <Summary item={item} variant={variant} />
+      {hasChildren && (
+        <ul class="border-l border-dotted border-[#e5e5e5] pl-4 dark:border-dark-300">
+          {item.children.map((child) => (
+            <li>
+              <Astro.self
+                variant={variant}
+                item={child}
+                open={open}
+                class={className}
+                activeItem={activeItem}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </details>
+  )
+}

@@ -1,0 +1,39 @@
+---
+import { generateCategoryPaths } from "../../lib/utils/generate-paths";
+import {
+  renameAttributes,
+  reverseSlugCaseToOriginal,
+} from "../../lib/utils/helper";
+import AccordionItem from "./AccordionItem.astro";
+
+import type { CategoryProps, TOCProps } from "../../lib/utils/index.type";
+
+type Props = {
+  outlines: ReadonlyArray<CategoryProps> | ReadonlyArray<TOCProps>;
+  variant: "tableOfContents" | "categories";
+  activeItem: string;
+  open?: boolean;
+};
+
+const { outlines, ...props } = Astro.props;
+const data =
+  props.variant === "tableOfContents"
+    ? outlines.map((item) => renameAttributes(item as TOCProps))
+    : generateCategoryPaths(outlines as ReadonlyArray<CategoryProps>);
+---
+
+{
+  data.map((item) =>
+    item.children && item.children.length > 0 ? (
+      <AccordionItem item={item} {...props} />
+    ) : (
+      <a
+        href={item.path}
+        class="py-1 text-left font-semibold leading-snug text-dark-100 dark:text-light-400"
+        data-astro-prefetch
+      >
+        <span>{reverseSlugCaseToOriginal(item.title)}</span>
+      </a>
+    ),
+  )
+}
