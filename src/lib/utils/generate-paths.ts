@@ -1,4 +1,4 @@
-import configServer from "~/config.server";
+import configServer from "../config.server";
 
 import type { BibliographyProps, CategoryProps } from "./index.type";
 

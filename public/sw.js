@@ -12,7 +12,7 @@ if ("serviceWorker" in navigator) {
 }
 
 // Call Install Event
-self.addEventListener("install", (e) => {
+self.addEventListener("install", () => {
   console.info("Service Worker: Installed");
 });
 
