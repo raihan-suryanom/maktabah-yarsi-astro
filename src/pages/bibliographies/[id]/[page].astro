@@ -23,7 +23,7 @@ import { formateDate, reverseSlugCaseToOriginal } from "~/lib/utils/helper";
 
 export const getStaticPaths = async () => {
   const bibliographies = await getAllBibliographies();
-  console.log(extractContentBibliographyPaths(bibliographies));
+
   return extractContentBibliographyPaths(bibliographies);
 };
 
