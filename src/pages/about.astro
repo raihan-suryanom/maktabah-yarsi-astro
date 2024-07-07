@@ -1,6 +1,6 @@
 ---
-import Breadcrumb from "../components/Breadcrumb.astro";
-import Layout from "../layouts/Layout.astro";
+import Breadcrumb from "~/components/Breadcrumb.astro";
+import Layout from "~/layouts/Layout.astro";
 
 const titleMeta =
   "Sebuah perpustakaan islam digital berbahasa Indonesia yang memungkinkan pengguna untuk mencari topik atau permasalah berdasarkan kata kunci seperti iman, sabar, shalat, dan riba.";
@@ -25,14 +25,20 @@ const urlMeta = `${import.meta.env.SITE}/about`;
     <meta property="og:url" content={urlMeta} />
     <meta property="og:title" content={titleMeta} />
     <meta property="og:description" content={descriptionMeta} />
-    <meta property="og:image" content="/favicon.svg" />
+    <meta
+      property="og:image"
+      content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
+    />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary" />
     <meta property="twitter:url" content={urlMeta} />
     <meta property="twitter:title" content={titleMeta} />
     <meta property="twitter:description" content={descriptionMeta} />
-    <meta property="twitter:image" content="/favicon.svg" />
+    <meta
+      property="twitter:image"
+      content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
+    />
   </Fragment>
   <div class="flex flex-col gap-8 px-8 py-5">
     <Breadcrumb paths={[{ title: "about" }]} />

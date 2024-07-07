@@ -1,15 +1,87 @@
 ---
-import Button from "../components/Button.astro";
-import Modal from "../components/Modal.astro";
-import Select from "../components/Select";
-import Layout from "../layouts/Layout.astro";
+import Button from "~/components/Button.astro";
+import Modal from "~/components/Modal.astro";
+import Select from "~/components/Select";
+import Layout from "~/layouts/Layout.astro";
+
+const titleMeta =
+  "Maktabah YARSI | Perpustakaan Islam Digital Berbahasa Indonesia";
+const descriptionMeta =
+  "Maktabah YARSI مَكْتَبَةُ يَرْسِي merupakan aplikasi perpustakaan islam digital berbahasa Indonesia yang memungkinkan pengguna untuk mencari topik atau permasalah berdasarkan kata kunci seperti iman, sabar, shalat dan riba.";
+const urlMeta = import.meta.env.SITE;
 ---
 
-<Layout title="Welcome to Astro.">
-  <Modal>
-    <form>
-      <Button type="submit">Test</Button>
-      <Select client:visible />
-    </form>
-  </Modal>
+<Layout>
+  <Fragment slot="metadata">
+    <!-- Primary Meta Tags -->
+    <title>{titleMeta}</title>
+    <meta name="title" content={titleMeta} />
+    <meta name="description" content={descriptionMeta} />
+    <meta
+      name="keywords"
+      content="perpustakaan islam online, sumber digital islam, tafsir quran indonesia, koleksi hadis indonesia, kajian islam indonesia, tafsir surah al-baqarah bahasa indonesia, koleksi hadis sahih terjemahan inggris, sumber belajar fiqh islam online"
+    />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={urlMeta} />
+    <meta property="og:title" content={titleMeta} />
+    <meta property="og:description" content={descriptionMeta} />
+    <meta
+      property="og:image"
+      content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content={urlMeta} />
+    <meta property="twitter:title" content={titleMeta} />
+    <meta property="twitter:description" content={descriptionMeta} />
+    <meta
+      property="twitter:image"
+      content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
+    />
+  </Fragment>
+  <main
+    class="mx-auto flex h-[calc(100vh-64px)] flex-col items-center justify-start pt-28 gap-10 text-center lg:w-9/12"
+  >
+    <h1 class="!font-lpmq text-6xl text-primary-light dark:text-primary-dark">
+      مَكْتَبَةُ يَرْسِي
+      <strong
+        class="block pt-7 text-7xl font-black text-dark-100 dark:text-light-100"
+      >
+        Maktabah YARSI
+      </strong>
+    </h1>
+    <p class="text-xl">
+      Sebuah perpustakaan islam digital berbahasa Indonesia yang memungkinkan
+      pengguna untuk mencari topik atau permasalahan berdasarkan kata kunci
+      seperti<strong> iman</strong>, <strong>sabar</strong>,
+      <strong>shalat</strong>, dan <strong>riba</strong>.
+    </p>
+    <Modal
+      class="w-full bg-light-300"
+      size="large"
+      placeholder="Cari nama buku, kategori, topik ..."
+    >
+      <form>
+        <Select client:visible />
+        <Button type="submit">Test</Button>
+      </form>
+    </Modal>
+  </main>
 </Layout>
+
+<style>
+  @font-face {
+    font-family: "LPMQ Isep Misbah";
+    src: url("/lpmq.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  p > strong {
+    @apply text-primary-light dark:text-primary-dark;
+  }
+</style>

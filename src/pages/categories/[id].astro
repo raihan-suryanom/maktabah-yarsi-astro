@@ -1,13 +1,13 @@
 ---
-import AccordionList from "../../components/accordion/AccordionList.astro";
-import BibliographyLists from "../../components/BibliographyLists.astro";
-import Breadcrumb from "../../components/Breadcrumb.astro";
-import PageControl from "../../components/PageControl.astro";
-import Layout from "../../layouts/Layout.astro";
-import { getBibliographies } from "../../lib/bibliographies.server";
-import { getCategories } from "../../lib/categories.server";
-import { extractCategoryPaths } from "../../lib/utils/extract-category-paths";
-import { reverseSlugCaseToOriginal } from "../../lib/utils/helper";
+import AccordionList from "~/components/accordion/AccordionList.astro";
+import BibliographyLists from "~/components/BibliographyLists.astro";
+import Breadcrumb from "~/components/Breadcrumb.astro";
+import PageControl from "~/components/PageControl.astro";
+import Layout from "~/layouts/Layout.astro";
+import { getBibliographies } from "~/lib/bibliographies.server";
+import { getCategories } from "~/lib/categories.server";
+import { extractCategoryPaths } from "~/lib/utils/extract-category-paths";
+import { reverseSlugCaseToOriginal } from "~/lib/utils/helper";
 
 export const getStaticPaths = async () => {
   const { categories } = await getCategories();
@@ -38,14 +38,20 @@ const urlMeta = `${import.meta.env.SITE}/categories/${id}`;
     <meta property="og:url" content={urlMeta} />
     <meta property="og:title" content={titleMeta} />
     <meta property="og:description" content={descriptionMeta} />
-    <meta property="og:image" content="/favicon.svg" />
+    <meta
+      property="og:image"
+      content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
+    />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary" />
     <meta property="twitter:url" content={urlMeta} />
     <meta property="twitter:title" content={titleMeta} />
     <meta property="twitter:description" content={descriptionMeta} />
-    <meta property="twitter:image" content="/favicon.svg" />
+    <meta
+      property="twitter:image"
+      content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
+    />
   </Fragment>
   <aside
     class="fixed flex h-screen w-3/12 flex-col overflow-y-scroll border-r border-black/10 pb-28 pl-8 pr-5 pt-5 [&>div[aria-label=skeleton]]:mb-3 [&>div[aria-label=skeleton]]:ml-auto"

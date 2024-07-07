@@ -1,18 +1,13 @@
 {
   "plugins": ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-astro"],
   "importOrder": [
+    "^astro$",
     "^react$",
     "",
     "<BUILTIN_MODULES>",
     "<THIRD_PARTY_MODULES>",
     "",
-    "^[.]/middlewares",
-    "^[.]/models",
-    "^[.]/controllers",
-    "^[.]/services",
-    "^[.]/data",
-    "^[.]/utils",
-    "^[.]",
+    "^[~]",
     "",
     "<TYPES>",
     "<TYPES>^[.]"

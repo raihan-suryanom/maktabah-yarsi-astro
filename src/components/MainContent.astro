@@ -1,0 +1,27 @@
+---
+type Props = {
+  content: string;
+  query?: string;
+};
+
+const { content, query } = Astro.props;
+
+const escapeRegExp = (text: string) =>
+  text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const highlightedWords = (text: string) => {
+  const escapedText = escapeRegExp(text);
+
+  const regex = new RegExp(escapedText, "gium");
+
+  return content
+    .replace(regex, (highlight) => `<mark>${highlight}</mark>`)
+    .replace(/  +/g, " ");
+};
+---
+
+<article
+  role="article"
+  class="prose prose-base min-h-screen max-w-none dark:prose-invert prose-p:indent-4"
+  set:html={query ? highlightedWords(query) : content}
+/>

@@ -1,0 +1,141 @@
+---
+import { Icon } from "astro-icon/components";
+
+import AccordionList from "~/components/accordion/AccordionList.astro";
+import Breadcrumb from "~/components/Breadcrumb.astro";
+import CardFooter from "~/components/card/CardFooter.astro";
+import CardHeader from "~/components/card/CardHeader.astro";
+import CardRoot from "~/components/card/CardRoot.astro";
+import CardTitle from "~/components/card/CardTitle.astro";
+import MainContent from "~/components/MainContent.astro";
+import Modal from "~/components/Modal.astro";
+import PageControl from "~/components/PageControl.astro";
+import Separator from "~/components/Separator.astro";
+import Layout from "~/layouts/Layout.astro";
+import {
+  getAllBibliographies,
+  getDetailBibliography,
+  getTableOfContents,
+} from "~/lib/bibliographies.server";
+import { getContents } from "~/lib/content.server";
+import { extractContentBibliographyPaths } from "~/lib/utils/extract-category-paths";
+import { formateDate, reverseSlugCaseToOriginal } from "~/lib/utils/helper";
+
+export const getStaticPaths = async () => {
+  const bibliographies = await getAllBibliographies();
+  console.log(extractContentBibliographyPaths(bibliographies));
+  return extractContentBibliographyPaths(bibliographies);
+};
+
+const { id, page } = Astro.params;
+const { text } = await getContents(id, page);
+const tableOfContents = await getTableOfContents(id);
+const bibliography = await getDetailBibliography(id);
+const titleMeta = `${bibliography.title} - ${reverseSlugCaseToOriginal(bibliography.subject)}`;
+const descriptionMeta = bibliography.description;
+const urlMeta = `${import.meta.env.SITE}${import.meta.env.PUBLIC_BIBLIOGRAPHIES_API}/${id}/${page}`;
+const imageMeta =
+  bibliography.image ||
+  "https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view";
+---
+
+<Layout>
+  <Fragment slot="metadata">
+    <!-- Primary Meta Tags -->
+    <title>{titleMeta}</title>
+    <meta name="title" content={titleMeta} />
+    <meta name="description" content={descriptionMeta} />
+    <meta
+      name="keywords"
+      content={`${reverseSlugCaseToOriginal(bibliography.subject)}, ${bibliography.title}`}
+    />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content={urlMeta} />
+    <meta property="og:title" content={titleMeta} />
+    <meta property="og:description" content={descriptionMeta} />
+    <meta property="og:image" content={imageMeta} />
+
+    <!-- Twitter -->
+    <meta
+      property="twitter:card"
+      content={bibliography.image ? "summary_large_image" : "summary"}
+    />
+    <meta property="twitter:url" content={urlMeta} />
+    <meta property="twitter:title" content={titleMeta} />
+    <meta property="twitter:description" content={descriptionMeta} />
+    <meta property="twitter:image" content={imageMeta} />
+  </Fragment>
+  <aside
+    class="fixed flex h-screen w-3/12 flex-col gap-3 overflow-y-scroll border-r border-black/10 pb-28 pl-8 pr-5 pt-5 dark:border-gray-800"
+  >
+    <AccordionList
+      outlines={tableOfContents}
+      variant="tableOfContents"
+      activeItem={page}
+      open
+    />
+  </aside>
+  <div class="ml-auto flex w-9/12 flex-col gap-5 px-8 pb-20 pt-5">
+    <div class="flex justify-between">
+      <Breadcrumb
+        paths={[
+          {
+            title: reverseSlugCaseToOriginal(bibliography.subject),
+            link: bibliography.category,
+          },
+          { title: bibliography.title },
+        ]}
+      />
+      <Modal
+        placeholder="Cari topik..."
+        size="medium"
+        class="gap-7 rounded-md"
+      />
+    </div>
+    <CardRoot
+      class="flex w-full flex-col gap-1.5 bg-light-300 p-5 dark:text-light-400"
+    >
+      <CardHeader class="p-0">
+        <CardTitle class="text-4xl">{bibliography.title}</CardTitle>
+      </CardHeader>
+      <CardFooter class="flex gap-7 p-0">
+        <div class="flex items-center gap-1">
+          <Icon name="lucide:pencil" size={20} />
+          <small class="text-base">{bibliography.creator}</small>
+        </div>
+        <div class="flex items-center gap-1">
+          <Icon name="lucide:layers" size={20} />
+          <small class="text-base">{bibliography.lastPage} halaman</small>
+        </div>
+        <div class="flex items-center gap-1">
+          <Icon name="lucide:calendar" size={20} />
+          <small class="text-base">
+            {formateDate(bibliography.date_created)}
+          </small>
+        </div>
+      </CardFooter>
+    </CardRoot>
+    <PageControl
+      bibliographyId={bibliography._id}
+      firstPage={bibliography.firstPage}
+      currentPage={page}
+      lastPage={bibliography.lastPage}
+    />
+
+    <Separator class="m-0 h-px p-0" />
+    <MainContent content={text} />
+    <Separator class="m-0 h-px p-0" />
+  </div>
+</Layout>
+
+<style>
+  @font-face {
+    font-family: "LPMQ Isep Misbah";
+    src: url("/lpmq.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>

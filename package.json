@@ -33,8 +33,6 @@
     "@tailwindcss/typography": "0.5.13",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
-    "@vite-pwa/assets-generator": "0.2.4",
-    "@vite-pwa/astro": "0.4.0",
     "clsx": "2.1.1",
     "prettier": "3.3.2",
     "prettier-plugin-astro": "0.14.0",

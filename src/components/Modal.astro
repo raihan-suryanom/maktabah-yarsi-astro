@@ -1,12 +1,38 @@
 ---
 import Button from "./Button.astro";
+import { Icon } from "astro-icon/components";
+
+import { cn } from "~/lib/utils/cn";
+
+import type { Props as ButtonProps } from "./Button.astro";
+
+type Props = ButtonProps & {
+  placeholder?: string;
+};
+
+const {
+  size = "medium",
+  variant = "secondary",
+  class: className,
+  placeholder = "Cari topik yang lain...",
+} = Astro.props;
 ---
 
 <dialog>
   <button>Close</button>
   <slot />
 </dialog>
-<Button>OPEN THE MODALLLL</Button>
+<Button
+  size={size}
+  variant={variant}
+  class={cn("justify-between font-normal", className)}
+>
+  <span class="opacity-50 font-normal">{placeholder}</span>
+  <Icon
+    name="lucide:search"
+    class="text-primary-light dark:text-primary-dark [&_g]:stroke-[3]"
+  />
+</Button>
 
 <script>
   const showButton = document.querySelector("dialog + button")!;
