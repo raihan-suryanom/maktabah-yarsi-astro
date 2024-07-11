@@ -1,0 +1,23 @@
+---
+import { wait } from "~/lib/utils/helper";
+
+type Props = {
+  promise: Promise<Object>;
+  delay?: number;
+};
+
+const { promise, delay } = Astro.props;
+
+let html: string;
+
+try {
+  await wait(delay as number); // WARNING: DON'T USE THIS, ONLY FOR DEBUGGING PURPOSE!
+  const response = await promise;
+
+  html = await Astro.slots.render("default", [response]);
+} catch (error) {
+  throw new Error(error as string);
+}
+---
+
+<Fragment set:html={html} />

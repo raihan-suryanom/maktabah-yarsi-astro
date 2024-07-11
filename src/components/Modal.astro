@@ -6,11 +6,21 @@ import { cn } from "~/lib/utils/cn";
 
 import type { Props as ButtonProps } from "./Button.astro";
 
-type Props = ButtonProps & {
+export type Props = ButtonProps & {
   placeholder?: string;
+  display?:
+    | "block"
+    | "inline-block"
+    | "inline"
+    | "flex"
+    | "flex-inline"
+    | "grid"
+    | "inline-grid"
+    | "contents";
 };
 
 const {
+  display,
   size = "medium",
   variant = "secondary",
   class: className,
@@ -18,49 +28,19 @@ const {
 } = Astro.props;
 ---
 
-<dialog>
-  <button>Close</button>
+<script src="./ContentToggle.ts"></script>
+
+<content-toggle class="w-full" data-display={display}>
+  <Button
+    size={size}
+    variant={variant}
+    class={cn("justify-between font-normal", className)}
+  >
+    <span class="opacity-50 font-normal">{placeholder}</span>
+    <Icon
+      name="lucide:search"
+      class="text-primary-light dark:text-primary-dark [&_g]:stroke-[3]"
+    />
+  </Button>
   <slot />
-</dialog>
-<Button
-  size={size}
-  variant={variant}
-  class={cn("justify-between font-normal", className)}
->
-  <span class="opacity-50 font-normal">{placeholder}</span>
-  <Icon
-    name="lucide:search"
-    class="text-primary-light dark:text-primary-dark [&_g]:stroke-[3]"
-  />
-</Button>
-
-<script>
-  const showButton = document.querySelector("dialog + button")!;
-  const closeButton = document.querySelector("dialog > button")!;
-  const dialog = document.querySelector("dialog")!;
-
-  showButton.addEventListener("click", () => dialog.showModal());
-  closeButton.addEventListener("click", () => dialog.close());
-</script>
-
-<style>
-  dialog {
-    position: relative;
-    max-width: 20rem;
-    padding: 2rem;
-    border: 0;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 0.5rem 0.25rem hsl(0 0% 0% / 10%);
-  }
-
-  dialog::backdrop {
-    background: hsl(0 0% 0% / 50%);
-  }
-
-  dialog > button {
-    font-size: 0.75em;
-    position: absolute;
-    top: 0.25em;
-    right: 0.25em;
-  }
-</style>
+</content-toggle>

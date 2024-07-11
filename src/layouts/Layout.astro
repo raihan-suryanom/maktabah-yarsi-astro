@@ -9,7 +9,7 @@ import Navbar from "./Navbar.astro";
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <slot name="metadata" />
-    <script is:inline src="/sw.js"></script>
+    <script is:inline src="/theme.js"></script>
   </head>
   <body
     class="bg-light-100 text-slate-700 dark:bg-dark-100 dark:text-slate-400 [&_*]:font-poppins"
@@ -18,23 +18,3 @@ import Navbar from "./Navbar.astro";
     <slot />
   </body>
 </html>
-
-<script is:inline>
-  const theme = (() => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-      return localStorage.getItem("theme");
-    }
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    return "light";
-  })();
-
-  if (theme === "light") {
-    document.documentElement.classList.remove("dark");
-  } else {
-    document.documentElement.classList.add("dark");
-  }
-
-  window.localStorage.setItem("theme", theme);
-</script>

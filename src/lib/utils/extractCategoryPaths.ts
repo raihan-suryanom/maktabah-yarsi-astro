@@ -1,6 +1,17 @@
-import type { BibliographyProps, CategoryProps } from "./index.type";
+import {
+  getBibliographies,
+  getTableOfContents,
+} from "../bibliographies.server";
+import { getContents } from "../content.server";
 
-export const extractCategoryPaths = (
+import type {
+  BibliographyProps,
+  CategoryProps,
+  ContentProps,
+  TOCProps,
+} from "./index.type";
+
+export const extractCategoryPaths = async (
   categories: ReadonlyArray<CategoryProps>,
 ) => {
   const result = [];
@@ -8,7 +19,12 @@ export const extractCategoryPaths = (
 
   while (stack.length > 0) {
     const { node } = stack.pop()!;
-    result.push({ params: { id: node._id }, props: { title: node.title } });
+    const { bibliographies } = await getBibliographies(node._id);
+
+    result.push({
+      params: { id: node._id },
+      props: { categories, bibliographies, title: node.title },
+    });
 
     if (node.children && node.children.length > 0) {
       stack.push(...node.children.map((child) => ({ node: child })));
@@ -49,22 +65,34 @@ export const filterLeafCategories = (
   }, []);
 };
 
-export const extractContentBibliographyPaths = (
+export const extractContentBibliographyPaths = async (
   allBibliographies: ReadonlyArray<BibliographyProps>,
 ) => {
-  const extractedData: { params: { id: string; page: string } }[] = [];
+  const extractedData: {
+    params: { id: string; page: string };
+    props: BibliographyProps & { toc: readonly TOCProps[] } & Pick<
+        ContentProps,
+        "text"
+      >;
+  }[] = [];
 
-  allBibliographies.forEach((bib) => {
+  for (const bib of allBibliographies) {
     const { _id: id, firstPage, lastPage } = bib;
 
     if (!firstPage || !lastPage) {
-      return;
+      continue;
     }
 
-    for (let i = firstPage; i <= lastPage; i++) {
-      extractedData.push({ params: { id, page: i.toString() } });
+    for (let page = firstPage; page <= lastPage; page++) {
+      const { text } = await getContents(id, page.toString());
+      const toc = await getTableOfContents(id);
+
+      extractedData.push({
+        params: { id, page: page.toString() },
+        props: { ...bib, text, toc },
+      });
     }
-  });
+  }
 
   return extractedData;
 };

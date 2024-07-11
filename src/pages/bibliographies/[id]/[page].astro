@@ -12,25 +12,18 @@ import Modal from "~/components/Modal.astro";
 import PageControl from "~/components/PageControl.astro";
 import Separator from "~/components/Separator.astro";
 import Layout from "~/layouts/Layout.astro";
-import {
-  getAllBibliographies,
-  getDetailBibliography,
-  getTableOfContents,
-} from "~/lib/bibliographies.server";
-import { getContents } from "~/lib/content.server";
-import { extractContentBibliographyPaths } from "~/lib/utils/extract-category-paths";
+import { getAllBibliographies } from "~/lib/bibliographies.server";
+import { extractContentBibliographyPaths } from "~/lib/utils/extractCategoryPaths";
 import { formateDate, reverseSlugCaseToOriginal } from "~/lib/utils/helper";
 
 export const getStaticPaths = async () => {
   const bibliographies = await getAllBibliographies();
 
-  return extractContentBibliographyPaths(bibliographies);
+  return await extractContentBibliographyPaths(bibliographies);
 };
 
 const { id, page } = Astro.params;
-const { text } = await getContents(id, page);
-const tableOfContents = await getTableOfContents(id);
-const bibliography = await getDetailBibliography(id);
+const bibliography = Astro.props;
 const titleMeta = `${bibliography.title} - ${reverseSlugCaseToOriginal(bibliography.subject)}`;
 const descriptionMeta = bibliography.description;
 const urlMeta = `${import.meta.env.SITE}${import.meta.env.PUBLIC_BIBLIOGRAPHIES_API}/${id}/${page}`;
@@ -43,7 +36,6 @@ const imageMeta =
   <Fragment slot="metadata">
     <!-- Primary Meta Tags -->
     <title>{titleMeta}</title>
-    <meta name="title" content={titleMeta} />
     <meta name="description" content={descriptionMeta} />
     <meta
       name="keywords"
@@ -71,7 +63,7 @@ const imageMeta =
     class="fixed flex h-screen w-3/12 flex-col gap-3 overflow-y-scroll border-r border-black/10 pb-28 pl-8 pr-5 pt-5 dark:border-gray-800"
   >
     <AccordionList
-      outlines={tableOfContents}
+      outlines={bibliography.toc}
       variant="tableOfContents"
       activeItem={page}
       open
@@ -125,7 +117,7 @@ const imageMeta =
     />
 
     <Separator class="m-0 h-px p-0" />
-    <MainContent content={text} />
+    <MainContent content={bibliography.text} />
     <Separator class="m-0 h-px p-0" />
   </div>
 </Layout>

@@ -1,7 +1,7 @@
 ---
 import AccordionItem from "./AccordionItem.astro";
 
-import { generateCategoryPaths } from "~/lib/utils/generate-paths";
+import { generateCategoryPaths } from "~/lib/utils/generatePaths";
 import {
   renameAttributes,
   reverseSlugCaseToOriginal,
@@ -17,6 +17,7 @@ type Props = {
 };
 
 const { outlines, ...props } = Astro.props;
+
 const data =
   props.variant === "tableOfContents"
     ? outlines.map((item) => renameAttributes(item as TOCProps))

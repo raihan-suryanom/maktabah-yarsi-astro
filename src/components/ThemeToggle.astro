@@ -20,9 +20,10 @@ const lightIcon = `
 `;
 ---
 
-<button>
+<button role="switch">
   <Skeleton class="inline-block h-6 w-6 rounded-full" />
 </button>
+
 <script define:vars={{ darkIcon, lightIcon }} is:inline>
   const button = document.querySelector("button");
   const theme = localStorage.getItem("theme") ?? "dark";

@@ -1,7 +1,5 @@
 ---
-import Button from "~/components/Button.astro";
-import Modal from "~/components/Modal.astro";
-import Select from "~/components/Select";
+import SearchForm from "~/components/SearchForm.astro";
 import Layout from "~/layouts/Layout.astro";
 
 const titleMeta =
@@ -15,7 +13,6 @@ const urlMeta = import.meta.env.SITE;
   <Fragment slot="metadata">
     <!-- Primary Meta Tags -->
     <title>{titleMeta}</title>
-    <meta name="title" content={titleMeta} />
     <meta name="description" content={descriptionMeta} />
     <meta
       name="keywords"
@@ -43,7 +40,7 @@ const urlMeta = import.meta.env.SITE;
     />
   </Fragment>
   <main
-    class="mx-auto flex h-[calc(100vh-64px)] flex-col items-center justify-start pt-28 gap-10 text-center lg:w-9/12"
+    class="mx-auto flex h-[calc(100vh-64px)] flex-col items-center justify-start gap-10 pt-28 text-center lg:w-9/12"
   >
     <h1 class="!font-lpmq text-6xl text-primary-light dark:text-primary-dark">
       مَكْتَبَةُ يَرْسِي
@@ -59,16 +56,12 @@ const urlMeta = import.meta.env.SITE;
       seperti<strong> iman</strong>, <strong>sabar</strong>,
       <strong>shalat</strong>, dan <strong>riba</strong>.
     </p>
-    <Modal
+    <SearchForm
       class="w-full bg-light-300"
-      size="large"
       placeholder="Cari nama buku, kategori, topik ..."
-    >
-      <form>
-        <Select client:visible />
-        <Button type="submit">Test</Button>
-      </form>
-    </Modal>
+      display="grid"
+      size="large"
+    />
   </main>
 </Layout>
 

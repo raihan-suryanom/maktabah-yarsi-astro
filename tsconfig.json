@@ -5,7 +5,6 @@
     "paths": {
       "~/*": ["./src/*"]
     },
-    "lib": ["ESNext", "DOM", "WebWorker"],
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "types": [

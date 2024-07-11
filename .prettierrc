@@ -1,5 +1,9 @@
 {
-  "plugins": ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-astro"],
+  "plugins": [
+    "prettier-plugin-astro",
+    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss"
+  ],
   "importOrder": [
     "^astro$",
     "^react$",
@@ -12,6 +16,7 @@
     "<TYPES>",
     "<TYPES>^[.]"
   ],
+  "tailwindFunctions": ["clsx"],
   "overrides": [
     {
       "files": ["*.astro", "*.svg"],
