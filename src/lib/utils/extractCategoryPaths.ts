@@ -54,8 +54,8 @@ export const extractCategoryValueAndLabel = (
 
 export const filterLeafCategories = (
   categories: ReadonlyArray<CategoryProps>,
-) => {
-  return categories.reduce<CategoryProps[]>((result, category) => {
+) =>
+  categories.reduce<CategoryProps[]>((result, category) => {
     if (!category.children) {
       result.push(category);
     } else {
@@ -63,7 +63,6 @@ export const filterLeafCategories = (
     }
     return result;
   }, []);
-};
 
 export const extractContentBibliographyPaths = async (
   allBibliographies: ReadonlyArray<BibliographyProps>,

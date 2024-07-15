@@ -1,5 +1,5 @@
 ---
-import SearchForm from "~/components/SearchForm.astro";
+import SearchForm from "~/components/search/SearchForm.astro";
 import Layout from "~/layouts/Layout.astro";
 
 const titleMeta =
@@ -57,7 +57,7 @@ const urlMeta = import.meta.env.SITE;
       <strong>shalat</strong>, dan <strong>riba</strong>.
     </p>
     <SearchForm
-      class="w-full bg-light-300"
+      class="w-full"
       placeholder="Cari nama buku, kategori, topik ..."
       display="grid"
       size="large"

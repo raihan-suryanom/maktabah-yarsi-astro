@@ -13,27 +13,32 @@ export default defineConfig({
     // TODO: experiment to on-demand ISR
     isr: {
       bypassToken: "EBPUjYLtnmlJSKpUPMRrpUtVOVfpajKM",
-      exclude: ["/search"],
+      exclude: [
+        "/search",
+        "/api/search",
+      ],
     },
   }),
   prefetch: true,
   integrations: [
-    // TODO: remove react deps or atleast use preact
+    // TODO: remove react deps or at least use preact
     react(),
     tailwind(),
     icon({
       include: {
         lucide: [
-          "search",
-          "text-search",
-          "x",
-          "layers",
-          "pencil",
+          "book-open",
+          "calendar",
           "chevron-right",
           "chevrons-right",
           "chevron-left",
-          "calendar",
           "chevrons-left",
+          "layers",
+          "pencil",
+          "search",
+          "shapes",
+          "text-search",
+          "x",
         ],
       },
     }),

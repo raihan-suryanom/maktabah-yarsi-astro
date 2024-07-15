@@ -8,8 +8,8 @@ import CardHeader from "~/components/card/CardHeader.astro";
 import CardRoot from "~/components/card/CardRoot.astro";
 import CardTitle from "~/components/card/CardTitle.astro";
 import MainContent from "~/components/MainContent.astro";
-import Modal from "~/components/Modal.astro";
 import PageControl from "~/components/PageControl.astro";
+import SearchForm from "~/components/search/SearchForm.astro";
 import Separator from "~/components/Separator.astro";
 import Layout from "~/layouts/Layout.astro";
 import { getAllBibliographies } from "~/lib/bibliographies.server";
@@ -80,10 +80,11 @@ const imageMeta =
           { title: bibliography.title },
         ]}
       />
-      <Modal
-        placeholder="Cari topik..."
-        size="medium"
+      <SearchForm
         class="gap-7 rounded-md"
+        placeholder="Cari topik..."
+        display="grid"
+        size="medium"
       />
     </div>
     <CardRoot

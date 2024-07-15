@@ -1,7 +1,7 @@
 {
   "plugins": [
-    "prettier-plugin-astro",
     "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-astro",
     "prettier-plugin-tailwindcss"
   ],
   "importOrder": [
@@ -12,6 +12,8 @@
     "<THIRD_PARTY_MODULES>",
     "",
     "^[~]",
+    "",
+    "^[.]",
     "",
     "<TYPES>",
     "<TYPES>^[.]"

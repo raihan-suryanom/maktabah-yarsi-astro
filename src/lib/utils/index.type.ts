@@ -21,7 +21,8 @@ export type SearchParamsProps = {
   case_sensitive: string;
   category: string;
   bibliography: string;
-  open: string;
+  entry: string;
+  open: "true" | "false";
 };
 
 export type BibliographyProps = BibliographyPages & {
