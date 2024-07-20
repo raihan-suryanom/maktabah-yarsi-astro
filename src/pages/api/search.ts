@@ -48,7 +48,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       data.append("open", "true");
     }
 
-    const searchResults = import.meta.env.PROD
+    const searchResults = import.meta.env.DEV
       ? await getSearchResults({
           keyword: data.get("query")!.toString(),
           page: data.get("entry")!.toString(),

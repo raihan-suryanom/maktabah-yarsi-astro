@@ -20,7 +20,7 @@ type Props = SearchParamsProps & { page: string };
 
 const props = Astro.props;
 
-const { data, totalResult } = import.meta.env.DEV
+const { data, totalResult } = import.meta.env.PROD
   ? await (searchMock as unknown as Promise<SearchProps>)
   : await getSearchResults({
       keyword: props.query,
