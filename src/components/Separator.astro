@@ -1,0 +1,22 @@
+---
+import { cn } from "~/lib/utils/cn";
+
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div"> & {
+  orientation?: "horizontal" | "vertical";
+};
+
+const { class: className, orientation = "horizontal", ...props } = Astro.props;
+---
+
+<div
+  role="separator"
+  class={cn(
+    "shrink-0 rounded-md bg-black/10 dark:bg-gray-800",
+    orientation === "horizontal" ? "h-1 w-full" : "h-full w-1",
+    className,
+  )}
+  {...props}
+>
+</div>

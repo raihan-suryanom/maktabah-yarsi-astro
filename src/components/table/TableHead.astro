@@ -1,0 +1,19 @@
+---
+import { cn } from "~/lib/utils/cn";
+
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"th">;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<th
+  class={cn(
+    "py-1.5 text-center align-middle font-bold text-light-100 [&:has([role=checkbox])]:pr-0",
+    className,
+  )}
+  {...props}
+>
+  <slot />
+</th>

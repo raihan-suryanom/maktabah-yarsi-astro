@@ -1,0 +1,101 @@
+---
+import LoadingIndicator from "astro-loading-indicator/component";
+import { ViewTransitions } from "astro:transitions";
+
+import AccordionList from "~/components/accordion/AccordionList.astro";
+import BibliographyLists from "~/components/BibliographyLists.astro";
+import Breadcrumb from "~/components/Breadcrumb.astro";
+import PageControl from "~/components/PageControl.astro";
+import Layout from "~/layouts/Layout.astro";
+import { getCategories } from "~/lib/categories.server";
+import { extractCategoryPaths } from "~/lib/utils/extractCategoryPaths";
+import { reverseSlugCaseToOriginal } from "~/lib/utils/helper";
+
+// TODO: implement paginate using paginate() inside param
+export const getStaticPaths = async () => {
+  const { categories } = await getCategories();
+
+  return extractCategoryPaths(categories);
+};
+
+const { id } = Astro.params;
+const { categories, title, bibliographies } = Astro.props;
+
+const titleMeta = `Daftar Buku ${title} - Maktaba YARSI`;
+const descriptionMeta = `Berikut daftar buku kategori ${title}`;
+const urlMeta = `${import.meta.env.SITE}/categories/${id}`;
+---
+
+<Layout>
+  <Fragment slot="metadata">
+    <!-- Primary Meta Tags -->
+    <title>{titleMeta}</title>
+    <meta name="description" content={descriptionMeta} />
+    <meta name="keywords" content={reverseSlugCaseToOriginal(title)} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="book" />
+    <meta property="og:url" content={urlMeta} />
+    <meta property="og:title" content={titleMeta} />
+    <meta property="og:description" content={descriptionMeta} />
+    <meta
+      property="og:image"
+      content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content={urlMeta} />
+    <meta property="twitter:title" content={titleMeta} />
+    <meta property="twitter:description" content={descriptionMeta} />
+    <meta
+      property="twitter:image"
+      content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
+    />
+
+    <ViewTransitions />
+    <LoadingIndicator color="#10b981" height="3px" />
+  </Fragment>
+  <aside
+    class="fixed flex h-screen w-3/12 flex-col overflow-y-scroll border-r border-black/10 pb-28 pl-8 pr-5 pt-5 [&>div[aria-label=skeleton]]:mb-3 [&>div[aria-label=skeleton]]:ml-auto"
+  >
+    <h2 class="mb-3 text-2xl font-bold dark:text-light-400">Kategori Buku</h2>
+    <AccordionList
+      outlines={categories}
+      variant="categories"
+      activeItem={id}
+      open
+    />
+  </aside>
+  <div
+    class="relative ml-auto flex min-h-screen w-9/12 flex-col gap-7 bg-light-300 px-8 pt-5 dark:bg-dark-200"
+  >
+    <Breadcrumb paths={[{ title }]} />
+    <h1 class="text-center text-4xl font-bold capitalize dark:text-light-400">
+      Daftar Buku {reverseSlugCaseToOriginal(title)}
+    </h1>
+    <section
+      class="grid grid-rows-none gap-5 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 [&>div[aria-label=skeleton]]:rounded-[10px]"
+    >
+      {/* TODO: New Pagination fallback skeleton */}
+      <BibliographyLists bibliographies={bibliographies} />
+      {
+        bibliographies.length > 0 ? (
+          // TODO: hide when there is not enough books or smaller device
+          <PageControl
+            class="fixed bottom-2.5 left-1/2 translate-x-[20%] rounded-md bg-light-100 px-3.5 py-1.5 dark:bg-dark-100"
+            currentPage="1"
+            lastPage={1}
+          />
+        ) : (
+          <p class="col-span-full mt-20 text-center text-lg [&>span]:font-semibold [&>span]:text-primary-light [&>span]:dark:text-primary-dark">
+            Maaf, kategori yang dipilih saat ini <span>sedang kosong</span>. Tim
+            kami sedang bekerja keras untuk menambahkan buku ke kategori ini.
+            Silakan <span>cek kembali</span> nanti untuk pembaruan. Terima kasih
+            atas kesabaran dan pengertiannya.
+          </p>
+        )
+      }
+    </section>
+  </div>
+</Layout>

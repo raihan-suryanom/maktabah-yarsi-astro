@@ -1,0 +1,49 @@
+---
+import { cn } from "~/lib/utils/cn";
+
+import Separator from "./Separator.astro";
+
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"nav"> & {
+  paths: { title: string; link?: string }[];
+};
+
+const { class: className, paths, ...props } = Astro.props;
+
+const rootPath = { title: "Halaman Utama", link: "/" };
+const links: Array<string> = [];
+---
+
+<nav class={cn("overflow-x-auto capitalize", className)} {...props}>
+  <ul class="flex items-center gap-2.5">
+    {
+      [rootPath, ...paths].map((path, level) => {
+        if (level === paths.length) {
+          return <li class="font-semibold">{path.title}</li>;
+        }
+
+        // TODO: please ensure the logic of root breadcrumb link
+        if (level) {
+          links.push(path.link as string);
+        }
+
+        return (
+          <li class="flex h-5 items-center gap-2.5">
+            <a
+              class="whitespace-nowrap hover:underline hover:decoration-primary-light hover:decoration-2 hover:underline-offset-1 dark:hover:decoration-primary-dark"
+              href={`/${links.join("/")}`}
+              data-astro-prefetch
+            >
+              {path.title}
+            </a>
+            <Separator
+              orientation="vertical"
+              class="w-0.5 rotate-12 dark:bg-slate-500"
+            />
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>

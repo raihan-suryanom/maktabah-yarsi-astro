@@ -1,0 +1,19 @@
+---
+import { cn } from "~/lib/utils/cn";
+
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"thead">;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<thead
+  class={cn(
+    "bg-primary-light [&_tr]:cursor-default [&_tr]:border-b [&_tr]:hover:bg-primary-light",
+    className,
+  )}
+  {...props}
+>
+  <slot />
+</thead>

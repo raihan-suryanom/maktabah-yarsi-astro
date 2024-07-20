@@ -1,0 +1,54 @@
+---
+import { Icon } from "astro-icon/components";
+
+import Separator from "~/components/Separator.astro";
+import ThemeToggle from "~/components/ThemeToggle.astro";
+---
+
+<header
+  class="sticky top-0 z-10 w-full border-b border-black/10 bg-light-100 px-8 py-3.5 text-dark-300 dark:border-gray-800 dark:bg-dark-100 dark:text-light-300"
+>
+  <nav class="flex items-center gap-5">
+    <a
+      href="/"
+      class="mr-auto flex cursor-pointer items-center"
+      data-astro-prefetch
+    >
+      <Icon name="maktabah" size={35} />
+      <span class="ml-2.5 font-semibold">Maktabah YARSI</span>
+    </a>
+    <ul class="flex items-center gap-10 font-bold">
+      <li role="navigation">
+        <a
+          class="hover:text-primary-light dark:hover:text-primary-dark"
+          href="/"
+          data-astro-prefetch
+        >
+          Halaman Utama
+        </a>
+      </li>
+      <li role="navigation">
+        <a
+          class="hover:text-primary-light dark:hover:text-primary-dark"
+          href="/categories/6573307da027a2e4a3a2828b"
+          data-astro-prefetch
+        >
+          Daftar Buku
+        </a>
+      </li>
+      <li role="navigation">
+        <a
+          class="hover:text-primary-light dark:hover:text-primary-dark"
+          href="/about"
+          data-astro-prefetch
+        >
+          Tentang Kami
+        </a>
+      </li>
+    </ul>
+    <span class="h-6">
+      <Separator orientation="vertical" class="w-0.5 opacity-20" />
+    </span>
+    <ThemeToggle />
+  </nav>
+</header>

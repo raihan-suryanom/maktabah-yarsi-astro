@@ -1,0 +1,106 @@
+---
+import { Icon } from "astro-icon/components";
+import { Fragment } from "astro/jsx-runtime";
+
+import { cn } from "~/lib/utils/cn";
+
+import Input from "./input/Input.astro";
+
+import type { HTMLAttributes } from "astro/types";
+
+type Props = {
+  currentPage: string;
+  lastPage: number;
+  bibliographyId?: string;
+  firstPage?: number;
+} & HTMLAttributes<"form">;
+
+const {
+  currentPage,
+  lastPage,
+  bibliographyId,
+  firstPage = 1,
+  class: className,
+  name,
+  ...props
+} = Astro.props;
+
+const bibliographies = "/bibliographies";
+
+const isServer = Boolean(name);
+
+const Action = isServer ? "button" : "a";
+
+// TODO: don't use any type
+const pageControlProps: any = (page: number, isDisabled: boolean) => ({
+  class:
+    "text-primary-light dark:text-primary-dark/80 dark:hover:text-primary-dark ",
+  disabled: isDisabled,
+  "aria-disabled": isDisabled,
+  ...(!isServer &&
+    bibliographyId &&
+    !isDisabled && {
+      href: `${bibliographies}/${bibliographyId}/${page}`,
+      "data-astro-prefetch": "hover",
+    }),
+  ...(isServer && { type: "submit", "data-value": page }),
+});
+---
+
+<form
+  method="post"
+  action="/api/search"
+  class={cn(
+    "page-control mx-auto flex items-center gap-x-3 [&>*[aria-disabled=true]]:opacity-50 [&_*[aria-disabled=true]]:cursor-not-allowed",
+    className,
+  )}
+  {...props}
+>
+  <Action {...pageControlProps(firstPage, +currentPage === firstPage)}>
+    <Icon name="lucide:chevrons-left" size={32} />
+  </Action>
+  <Action {...pageControlProps(+currentPage - 1, +currentPage === firstPage)}>
+    <Icon name="lucide:chevron-left" size={32} />
+  </Action>
+  <Input
+    type="number"
+    dimension="small"
+    name={name}
+    class="w-8 appearance-none text-center text-sm"
+    value={currentPage}
+  />
+  <Action {...pageControlProps(+currentPage + 1, +currentPage === lastPage)}>
+    <Icon name="lucide:chevron-right" size={32} />
+  </Action>
+  <Action {...pageControlProps(lastPage, +currentPage === lastPage)}>
+    <Icon name="lucide:chevrons-right" size={32} />
+  </Action>
+</form>
+
+<script>
+  const form = document.querySelectorAll(
+    "form.page-control",
+  ) as NodeListOf<HTMLFormElement>;
+
+  form.forEach((pageControl) => {
+    const input = pageControl.querySelector("input");
+
+    if (Boolean(input?.getAttribute("name"))) {
+      const actions = pageControl.querySelectorAll(
+        "button",
+      ) as NodeListOf<HTMLButtonElement>;
+
+      actions?.forEach((action) =>
+        action.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const targettedValue = action?.getAttribute("data-value") as string;
+          input?.setAttribute("value", targettedValue);
+
+          pageControl.submit();
+        }),
+      );
+    }
+  });
+</script>

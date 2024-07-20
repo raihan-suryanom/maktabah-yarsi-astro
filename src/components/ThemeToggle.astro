@@ -1,0 +1,53 @@
+---
+import Skeleton from "./Skeleton.astro";
+
+const darkIcon = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24">
+    <use href="#lucide--moon-star"/>
+    <symbol id="lucide--moon-star" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.35" d="M12 3a6 6 0 0 0 9 9a9 9 0 1 1-9-9m8 0v4m2-2h-4" />
+    </symbol>
+  </svg>
+`;
+const lightIcon = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24">
+    <use href="#lucide--sun"/>
+    <symbol id="lucide--sun" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.35">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+      </g>
+    </symbol>
+  </svg>
+`;
+---
+
+<button role="switch">
+  <Skeleton class="inline-block h-6 w-6 rounded-full" />
+</button>
+
+<script define:vars={{ darkIcon, lightIcon }} is:inline>
+  const button = document.querySelector("button");
+  const theme = localStorage.getItem("theme") ?? "dark";
+  button.innerHTML = theme === "dark" ? darkIcon : lightIcon;
+
+  const toggleTheme = () => {
+    const currentTheme = localStorage.getItem("theme");
+    if (currentTheme === "dark") {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    }
+    button.innerHTML = currentTheme === "light" ? darkIcon : lightIcon;
+  };
+
+  // TODO: please make this logic of code cleaner
+  button.addEventListener("click", toggleTheme);
+  document.addEventListener("astro:after-swap", () => {
+    const button = document.querySelector("button");
+    button.innerHTML =
+      localStorage.getItem("theme") === "dark" ? darkIcon : lightIcon;
+  });
+</script>

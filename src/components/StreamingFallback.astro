@@ -1,0 +1,10 @@
+<div class="fallback">
+  <slot name="fallback" />
+</div>
+<slot name="content" />
+
+<style>
+  .fallback:has(+ *) {
+    display: none;
+  }
+</style>

@@ -1,0 +1,82 @@
+---
+import { Icon } from "astro-icon/components";
+
+import bibliographyMock from "~/fixtures/bibliography.json";
+import { getDetailBibliography } from "~/lib/bibliographies.server";
+import {
+  formateDate,
+  reverseSlugCaseToOriginal,
+  wait,
+} from "~/lib/utils/helper";
+
+import Breadcrumb from "../Breadcrumb.astro";
+import CardFooter from "../card/CardFooter.astro";
+import CardHeader from "../card/CardHeader.astro";
+import CardRoot from "../card/CardRoot.astro";
+import CardTitle from "../card/CardTitle.astro";
+import PageControl from "../PageControl.astro";
+import SearchForm from "../search/SearchForm.astro";
+
+import type { BibliographyProps } from "~/lib/utils/index.type";
+
+type Props = {
+  id: string;
+  page: string;
+};
+
+const { id, page } = Astro.props;
+
+const bibliography = import.meta.env.PROD
+  ? (bibliographyMock as unknown as BibliographyProps)
+  : await getDetailBibliography(id);
+---
+
+<div class="flex justify-between">
+  <Breadcrumb
+    paths={[
+      {
+        title: reverseSlugCaseToOriginal(bibliography.subject),
+        link: bibliography.category,
+      },
+      { title: bibliography.title },
+    ]}
+  />
+  <SearchForm
+    class="gap-7 rounded-md"
+    placeholder="Cari topik..."
+    display="grid"
+    size="medium"
+  />
+</div>
+<CardRoot
+  class="flex w-full flex-col gap-1.5 bg-light-300 p-5 dark:text-light-400"
+>
+  <CardHeader class="p-0">
+    <CardTitle class="text-4xl">{bibliography.title}</CardTitle>
+  </CardHeader>
+  <CardFooter class="flex gap-7 p-0">
+    <div class="flex items-center gap-1">
+      <Icon name="lucide:pencil" size={20} />
+      <small class="text-base">{bibliography.creator}</small>
+    </div>
+    <div class="flex items-center gap-1">
+      <Icon name="lucide:layers" size={20} />
+      <small class="text-base">
+        {bibliography.lastPage} halaman
+      </small>
+    </div>
+    <div class="flex items-center gap-1">
+      <Icon name="lucide:calendar" size={20} />
+      <small class="text-base">
+        {formateDate(bibliography.date_created)}
+      </small>
+    </div>
+  </CardFooter>
+</CardRoot>
+<PageControl
+  bibliographyId={bibliography._id}
+  firstPage={bibliography.firstPage}
+  currentPage={page}
+  lastPage={bibliography.lastPage}
+  name="page"
+/>

@@ -1,0 +1,47 @@
+---
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+
+import coverNotFound from "~/assets/images/book-cover-not-available.png";
+import { generateBibliographyPaths } from "~/lib/utils/generatePaths";
+
+import CardFooter from "./card/CardFooter.astro";
+import CardRoot from "./card/CardRoot.astro";
+import CardTitle from "./card/CardTitle.astro";
+
+import type { BibliographyProps } from "~/lib/utils/index.type";
+
+type Props = {
+  bibliographies: ReadonlyArray<BibliographyProps>;
+};
+
+const formattedBibliographies = generateBibliographyPaths(
+  Astro.props.bibliographies,
+);
+---
+
+{
+  formattedBibliographies.map((bibliography) => (
+    <CardRoot>
+      <a href={bibliography.path} data-astro-prefetch>
+        <Image
+          src={coverNotFound}
+          alt={`${bibliography.title}'s cover bibliography`}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          class="relative aspect-[1/1.5] w-full bg-gray-100 object-cover object-center md:rounded-[10px]"
+        />
+      </a>
+      <CardFooter class="mt-1.5 flex-col items-start gap-0.5 p-0 text-dark-100 dark:text-light-300">
+        <CardTitle class="text-base">{bibliography.title}</CardTitle>
+        <span class="flex items-center gap-1.5">
+          <Icon name="lucide:pencil" size={12} />
+          <small class="text-xs">{bibliography.creator}</small>
+        </span>
+        <div class="flex items-center gap-1.5">
+          <Icon name="lucide:layers" size={12} />
+          <small class="text-xs">{bibliography.lastPage} halaman</small>
+        </div>
+      </CardFooter>
+    </CardRoot>
+  ))
+}

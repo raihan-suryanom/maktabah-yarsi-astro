@@ -1,25 +1,27 @@
 {
-  "plugins": ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-astro"],
+  "plugins": [
+    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-astro",
+    "prettier-plugin-tailwindcss"
+  ],
   "importOrder": [
+    "^astro$",
     "^react$",
     "",
     "<BUILTIN_MODULES>",
     "<THIRD_PARTY_MODULES>",
     "",
-    "^[.]/middlewares",
-    "^[.]/models",
-    "^[.]/controllers",
-    "^[.]/services",
-    "^[.]/data",
-    "^[.]/utils",
+    "^[~]",
+    "",
     "^[.]",
     "",
     "<TYPES>",
     "<TYPES>^[.]"
   ],
+  "tailwindFunctions": ["clsx"],
   "overrides": [
     {
-      "files": "*.astro",
+      "files": ["*.astro", "*.svg"],
       "options": {
         "parser": "astro"
       }

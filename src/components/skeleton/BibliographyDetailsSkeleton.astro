@@ -1,0 +1,38 @@
+---
+import CardFooter from "../card/CardFooter.astro";
+import CardHeader from "../card/CardHeader.astro";
+import CardRoot from "../card/CardRoot.astro";
+import CardTitle from "../card/CardTitle.astro";
+import Skeleton from "../Skeleton.astro";
+import BreadcrumbSkeleton from "./BreadcrumbSkeleton.astro";
+---
+
+<div class="mb-5 flex justify-between">
+  <BreadcrumbSkeleton />
+  <Skeleton class="h-11 w-44 rounded-md py-2" />
+</div>
+<CardRoot
+  class="flex w-full flex-col gap-3 bg-primary-light p-5 text-light-100"
+>
+  <CardHeader class="p-0">
+    <CardTitle class="text-4xl">
+      <Skeleton class="h-[34px] w-2/3" />
+    </CardTitle>
+  </CardHeader>
+  <CardFooter class="flex gap-7 p-0">
+    <div class="flex items-center gap-1">
+      <Skeleton class="w-5 rounded-full" />
+      <Skeleton class="w-36" />
+    </div>
+    <div class="flex items-center gap-1">
+      <Skeleton class="w-5 rounded-full" />
+      <Skeleton class="w-6" />
+      <span>halaman</span>
+    </div>
+    <div class="flex items-center gap-1">
+      <Skeleton class="w-5 rounded-full" />
+      <Skeleton class="w-20" />
+    </div>
+  </CardFooter>
+</CardRoot>
+<!-- TODO: add PageControlSkeleton below  -->

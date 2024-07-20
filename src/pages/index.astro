@@ -1,97 +1,85 @@
 ---
-import Button from "../components/Button.astro";
-import Test from "../components/Test";
-import Layout from "../layouts/Layout.astro";
+import LoadingIndicator from "astro-loading-indicator/component";
+import { ViewTransitions } from "astro:transitions";
 
-// export const prerender = false;
+import SearchForm from "~/components/search/SearchForm.astro";
+import Layout from "~/layouts/Layout.astro";
 
-if (Astro.request.method === "POST") {
-  try {
-    const data = await Astro.request.formData();
-    console.log(data);
-    // const year = data.get("year");
-    // const type = data.get("type");
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
-    }
-  }
-}
+const titleMeta =
+  "Maktabah YARSI | Perpustakaan Islam Digital Berbahasa Indonesia";
+const descriptionMeta =
+  "Maktabah YARSI مَكْتَبَةُ يَرْسِي merupakan aplikasi perpustakaan islam digital berbahasa Indonesia yang memungkinkan pengguna untuk mencari topik atau permasalah berdasarkan kata kunci seperti iman, sabar, shalat dan riba.";
+const urlMeta = import.meta.env.SITE;
 ---
 
-<Layout title="Welcome to Astro.">
-  <Button id="openModal">Open The Modal</Button>
-  <dialog id="modal" class="modal">
-    <form method="post" class="flex flex-col gap-y-5" action="/">
-      <label for="year">
-        Year:
-        <input
-          class="border-2 block border-black"
-          name="year"
-          type="number"
-          pattern="/^-?\d+\.?\d*$/"
-          min="2017"
-          required
-          placeholder="Competition Year"
-        />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
-    <Test client:visible />
-    <button id="closeModal" class="modal-close-btn">Close</button>
-    <p>Test Modal</p>
-  </dialog>
-  <Button>Test</Button>
+<Layout>
+  <Fragment slot="metadata">
+    <!-- Primary Meta Tags -->
+    <title>{titleMeta}</title>
+    <meta name="description" content={descriptionMeta} />
+    <meta
+      name="keywords"
+      content="perpustakaan islam online, sumber digital islam, tafsir quran indonesia, koleksi hadis indonesia, kajian islam indonesia, tafsir surah al-baqarah bahasa indonesia, koleksi hadis sahih terjemahan inggris, sumber belajar fiqh islam online"
+    />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={urlMeta} />
+    <meta property="og:title" content={titleMeta} />
+    <meta property="og:description" content={descriptionMeta} />
+    <meta
+      property="og:image"
+      content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content={urlMeta} />
+    <meta property="twitter:title" content={titleMeta} />
+    <meta property="twitter:description" content={descriptionMeta} />
+    <meta
+      property="twitter:image"
+      content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
+    />
+    <ViewTransitions />
+    <LoadingIndicator color="#10b981" height="3px" />
+  </Fragment>
+  <main
+    class="mx-auto flex h-[calc(100vh-64px)] flex-col items-center justify-start gap-10 pt-28 text-center lg:w-9/12"
+  >
+    <h1 class="!font-lpmq text-6xl text-primary-light dark:text-primary-dark">
+      مَكْتَبَةُ يَرْسِي
+      <strong
+        class="block pt-7 text-7xl font-black text-dark-100 dark:text-light-100"
+      >
+        Maktabah YARSI
+      </strong>
+    </h1>
+    <p class="text-xl">
+      Sebuah perpustakaan islam digital berbahasa Indonesia yang memungkinkan
+      pengguna untuk mencari topik atau permasalahan berdasarkan kata kunci
+      seperti<strong> iman</strong>, <strong>sabar</strong>,
+      <strong>shalat</strong>, dan <strong>riba</strong>.
+    </p>
+    <SearchForm
+      class="w-full"
+      placeholder="Cari nama buku, kategori, topik ..."
+      display="grid"
+      size="large"
+    />
+  </main>
 </Layout>
 
-<script>
-  if (window.history.replaceState) {
-    window.history.replaceState(null, "", window.location.href);
-  }
-
-  const dialog = document.getElementById("modal") as HTMLDialogElement;
-  const openDialogButton = document.getElementById(
-    "openModal",
-  ) as HTMLButtonElement;
-  const closeDialogButton = document.getElementById(
-    "closeModal",
-  ) as HTMLButtonElement;
-
-  openDialogButton.addEventListener("click", () => dialog.showModal());
-  closeDialogButton.addEventListener("click", () => dialog.close());
-</script>
-
 <style>
-  .modal {
-    position: relative;
-    max-width: 20rem;
-    padding: 2rem;
-    border: 0;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 0.5rem 0.25rem hsl(0 0% 0% / 10%);
+  @font-face {
+    font-family: "LPMQ Isep Misbah";
+    src: url("/lpmq.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
   }
 
-  .modal-close-btn {
-    font-size: 0.75em;
-    position: absolute;
-    top: 0.25em;
-    right: 0.25em;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  button {
-    padding: 0.5em;
-    font: inherit;
-    line-height: 1;
-  }
-
-  button {
-    cursor: pointer;
-  }
-
-  .modal::backdrop {
-    background: hsl(0 0% 0% / 50%);
+  p > strong {
+    @apply text-primary-light dark:text-primary-dark;
   }
 </style>
