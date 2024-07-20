@@ -1,0 +1,40 @@
+---
+import { Icon } from "astro-icon/components";
+
+import Button from "~/components/Button.astro";
+import Layout from "~/layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="mx-auto my-auto flex w-full flex-col gap-y-4 py-20 text-center">
+    <Icon
+      name="lucide:frown"
+      class="mx-auto font-bold text-red-600 dark:text-rose-500"
+      size={100}
+    />
+    <main>
+      <h2 class="text-lg">
+        Maaf, sepertinya halaman yang anda ingin telusuri{" "}
+        <span class="text-rose-600 dark:text-rose-500"> belum tersedia </span>
+        .
+      </h2>
+      <p>Mungkin ada kesalahan pada alamat URL.</p>
+    </main>
+    <Button id="back" variant="outline" class="mx-auto" size="medium">
+      Kembali ke halaman sebelumnya
+    </Button>
+    <small>atau</small>
+    <a
+      href="/"
+      class="decoration-primary-light underline-offset-2 hover:underline dark:decoration-primary-dark"
+    >
+      Kembali ke halaman utama
+    </a>
+  </div>
+</Layout>
+
+<script>
+  const backButton = document.getElementById("back") as HTMLButtonElement;
+
+  backButton.addEventListener("click", () => window.history.back());
+</script>

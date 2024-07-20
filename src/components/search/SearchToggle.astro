@@ -1,0 +1,55 @@
+---
+import type { Props as ButtonProps } from "../Button.astro";
+
+type Props = ButtonProps;
+
+const props = Astro.props;
+---
+
+<form id="search-toggle" class="w-full" action="/api/search" method="post">
+  <input
+    data-open={props["data-open"]}
+    name="open"
+    type="hidden"
+    class="hidden"
+    hidden
+    disabled
+    aria-hidden="true"
+    aria-disabled="true"
+  />
+  <button
+    role="switch"
+    type="submit"
+    class="flex w-full items-center justify-center bg-red-500 py-1 text-center text-sm text-white transition-all hover:cursor-pointer hover:bg-red-600"
+    {...props}
+  >
+    Tekan untuk
+    {props["data-open"] === "true" ? "menutup" : "membuka"}
+    tabel pencarian
+  </button>
+</form>
+<script>
+  const form = document.getElementById("search-toggle") as HTMLFormElement;
+
+  const toggleSearchButton = form.querySelector(
+    "button[role=switch]",
+  ) as HTMLButtonElement;
+
+  toggleSearchButton.addEventListener("click", (event) => {
+    const open = form?.querySelector(
+      "input[type=hidden][name=open]",
+    ) as HTMLInputElement;
+
+    open.removeAttribute("disabled");
+    open.removeAttribute("aria-disabled");
+    const isOpen = toggleSearchButton.getAttribute("data-open");
+
+    if (isOpen === "true") {
+      open.setAttribute("value", "false");
+    } else {
+      open.setAttribute("value", "true");
+    }
+
+    form.submit();
+  });
+</script>

@@ -1,4 +1,7 @@
 ---
+import LoadingIndicator from "astro-loading-indicator/component";
+import { ViewTransitions } from "astro:transitions";
+
 import AccordionList from "~/components/accordion/AccordionList.astro";
 import BibliographyLists from "~/components/BibliographyLists.astro";
 import Breadcrumb from "~/components/Breadcrumb.astro";
@@ -49,6 +52,9 @@ const urlMeta = `${import.meta.env.SITE}/categories/${id}`;
       property="twitter:image"
       content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
     />
+
+    <ViewTransitions />
+    <LoadingIndicator color="#10b981" height="3px" />
   </Fragment>
   <aside
     class="fixed flex h-screen w-3/12 flex-col overflow-y-scroll border-r border-black/10 pb-28 pl-8 pr-5 pt-5 [&>div[aria-label=skeleton]]:mb-3 [&>div[aria-label=skeleton]]:ml-auto"

@@ -1,0 +1,33 @@
+---
+import { Icon } from "astro-icon/components";
+
+import SearchForm from "~/components/search/SearchForm.astro";
+import Layout from "~/layouts/Layout.astro";
+---
+
+<Layout>
+  <div
+    class="mx-auto my-auto flex w-full flex-col items-center gap-y-4 py-20 text-center"
+  >
+    <Icon
+      name="lucide:search-x"
+      class="mx-auto font-bold text-red-600 dark:text-rose-500"
+      size={100}
+    />
+    <main>
+      <h2 class="text-lg">
+        Maaf, sepertinya tidak ada hasil yang sangat cocok untuk penelusuran
+        Anda.
+      </h2>
+      <p class="[&>span]:text-primary-light [&>span]:dark:text-primary-dark">
+        Coba hilangkan centang pada pilihan <span>Kata Persis</span> dan{" "}
+        <span>Sensitif Huruf Besar/Kecil</span>.
+      </p>
+    </main>
+    <SearchForm
+      class="rounded-md [&_span]:mr-5"
+      size="medium"
+      placeholder="Cari topik yang lain..."
+    />
+  </div>
+</Layout>

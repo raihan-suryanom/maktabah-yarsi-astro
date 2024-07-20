@@ -1,0 +1,44 @@
+---
+import { cn } from "~/lib/utils/cn";
+
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"tr">;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<tr
+  class={cn(
+    "cursor-pointer border-b transition-colors hover:bg-slate-100/50 data-[state=selected]:bg-slate-100 dark:hover:bg-slate-800/50 dark:data-[state=selected]:bg-slate-800",
+    className,
+  )}
+  {...props}
+>
+  <slot />
+</tr>
+
+<!-- TODO: try to do it without scripts so we can remove this -->
+<script>
+  const form = document.getElementById("search-table") as HTMLFormElement;
+
+  const tableRows = form?.querySelectorAll(
+    "tbody > tr",
+  ) as NodeListOf<HTMLTableRowElement>;
+
+  tableRows?.forEach((tr) =>
+    tr.addEventListener("click", () => {
+      const id = form?.querySelector(
+        "input[type=hidden][name=id]",
+      ) as HTMLInputElement;
+      const page = form?.querySelector(
+        "input[type=hidden][name=page]",
+      ) as HTMLInputElement;
+
+      id.setAttribute("value", tr.getAttribute("data-bibliography") as string);
+      page.setAttribute("value", tr.getAttribute("data-page") as string);
+
+      form.submit();
+    }),
+  );
+</script>

@@ -1,0 +1,115 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { getCategories } from "~/lib/categories.server";
+import { filterLeafCategories } from "~/lib/utils/extractCategoryPaths";
+
+import Button from "../Button.astro";
+import Input from "../input/Input.astro";
+import Modal from "../modal/Modal.astro";
+import AdvancedSearch from "../select/AdvancedSearch";
+
+import type { Props as ModalProps } from "../modal/Modal.astro";
+
+type Props = ModalProps;
+
+const categoriesPromise = await getCategories();
+
+const { placeholder, ...props } = Astro.props;
+---
+
+<Modal placeholder={placeholder} {...props}>
+  <div
+    role="dialog"
+    class="pointer-events-auto fixed left-[50%] top-[50%] z-50 hidden w-full max-w-4xl translate-x-[-50%] translate-y-[-50%] gap-2.5 border border-slate-200 bg-white p-6 shadow-lg duration-200 dark:border-slate-800 dark:bg-dark-200 sm:rounded-lg md:w-full"
+  >
+    <button
+      id="close-button"
+      type="button"
+      class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 disabled:pointer-events-none dark:ring-offset-slate-950 dark:focus:ring-slate-300"
+    >
+      <Icon name="lucide:x" class="h-4 w-4" />
+      <span class="sr-only">Close</span>
+    </button>
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2
+        class="text-center text-lg font-semibold leading-none tracking-tight lg:text-3xl"
+      >
+        Fitur Pencarian Topik
+      </h2>
+    </div>
+    <form
+      class="flex min-h-[30rem] flex-col gap-2.5 [&_small]:before:text-primary-light [&_small]:before:content-['*']"
+      method="post"
+      action="/api/search"
+    >
+      <div class="flex flex-col gap-1">
+        <div class="relative flex items-center">
+          <Icon
+            name="lucide:text-search"
+            class="absolute left-3 [&_g]:stroke-[3]"
+            size={20}
+          />
+          <Input
+            type="search"
+            name="query"
+            dimension="small"
+            class="w-full pl-11 pr-3"
+            placeholder="Masukkan kata kunci topik permasalahan seperti iman, ikhlas, jodoh dan lain-lain."
+            minlength={4}
+            required
+          />
+        </div>
+        <small>Wajib diisi dan masukkan mimimal 4 huruf.</small>
+      </div>
+      <div class="flex items-center gap-5 [&>div]:gap-2 [&_label]:font-normal">
+        <div class="flex flex-row gap-1">
+          <input
+            type="checkbox"
+            name="exact_match"
+            id="exact_match"
+            value="true"
+            class="peer h-6 w-6 shrink-0 rounded-md border-2 border-[#c3c3c3] ring-offset-white focus-visible:border-primary-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary-light data-[state=checked]:bg-primary-light data-[state=checked]:text-slate-50 dark:border-light-300 dark:ring-offset-dark-200 dark:focus-visible:border-primary-dark dark:focus-visible:ring-primary-dark dark:data-[state=checked]:border-primary-dark dark:data-[state=checked]:bg-primary-dark"
+          />
+          <label for="exact_match" class="text-lg font-semibold">
+            Kata Persis
+          </label>
+        </div>
+        <div class="flex flex-row gap-1">
+          <input
+            type="checkbox"
+            name="case_sensitive"
+            id="case_sensitive"
+            value="true"
+            class="peer h-6 w-6 shrink-0 rounded-md border-2 border-[#c3c3c3] ring-offset-white focus-visible:border-primary-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-light focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary-light data-[state=checked]:bg-primary-light data-[state=checked]:text-slate-50 dark:border-light-300 dark:ring-offset-dark-200 dark:focus-visible:border-primary-dark dark:focus-visible:ring-primary-dark dark:data-[state=checked]:border-primary-dark dark:data-[state=checked]:bg-primary-dark"
+          />
+          <label for="case_sensitive" class="text-lg font-semibold">
+            Sensitif Huruf Besar/Kecil
+          </label>
+        </div>
+      </div>
+      <AdvancedSearch
+        categories={filterLeafCategories(categoriesPromise.categories)}
+        client:visible
+      />
+      <footer class="mt-auto flex w-full gap-5 [&>button]:flex-1">
+        <Button
+          type="submit"
+          class="disabled:cursor-not-allowed disabled:opacity-50"
+          variant="primary"
+          size="medium"
+        >
+          Cari Kata
+        </Button>
+        <Button
+          variant="outline"
+          class="disabled:cursor-not-allowed disabled:opacity-50"
+          size="medium"
+          type="reset"
+        >
+          Hapus Kata
+        </Button>
+      </footer>
+    </form>
+  </div>
+</Modal>

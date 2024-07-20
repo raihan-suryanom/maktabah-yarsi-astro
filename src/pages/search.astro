@@ -1,0 +1,114 @@
+---
+import BibliographyDetailsAsync from "~/components/async/BibliographyDetailsAsync.astro";
+import MainContentAsync from "~/components/async/MainContentAsync.astro";
+import TableOfContentAsync from "~/components/async/TableOfContentAsync.astro";
+import SearchTable from "~/components/search/SearchTable.astro";
+import SearchToggle from "~/components/search/SearchToggle.astro";
+import Separator from "~/components/Separator.astro";
+import BibliographyDetailsSkeleton from "~/components/skeleton/BibliographyDetailsSkeleton.astro";
+import MainContentSkeleton from "~/components/skeleton/MainContentSkeleton.astro";
+import SearchTableSkeleton from "~/components/skeleton/SearchTableSkeleton.astro";
+import StreamingFallback from "~/components/StreamingFallback.astro";
+import Layout from "~/layouts/Layout.astro";
+
+import type { SearchParamsProps } from "~/lib/utils/index.type";
+
+export const prerender = false;
+
+const { searchParams } = Astro.url;
+
+const page = searchParams.get("page");
+const id = searchParams.get("id");
+const query = searchParams.get("query");
+const open = searchParams.get("open");
+
+// TODO: should be move on server validation / middleware
+if (!page || !id) {
+  return Astro.redirect("/");
+}
+---
+
+<Layout>
+  <Fragment slot="metadata">
+    <title>{query} - Maktabah YARSI</title>
+    <meta
+      name="keywords"
+      content="maktabah yarsi, buku islam, perpustakaan islam, pencarian buku"
+    />
+  </Fragment>
+  <aside>
+    <form
+      id="table-of-content"
+      action="/api/search"
+      method="post"
+      class="fixed flex h-screen w-3/12 flex-col gap-3 overflow-y-scroll border-r border-black/10 pb-28 pl-8 pr-5 pt-5 dark:border-gray-800"
+    >
+      <input
+        name="page"
+        type="hidden"
+        hidden
+        aria-hidden="true"
+        class="hidden"
+      />
+      <!-- TODO: refactor to toggleable TOC -->
+      <StreamingFallback>
+        <MainContentSkeleton slot="fallback" />
+        <TableOfContentAsync id={id} page={page} slot="content" />
+      </StreamingFallback>
+    </form>
+  </aside>
+  <div class="ml-auto flex w-9/12 flex-col gap-5 px-8 pb-20 pt-5">
+    <StreamingFallback>
+      <BibliographyDetailsSkeleton slot="fallback" />
+      <BibliographyDetailsAsync page={page} id={id} slot="content" />
+    </StreamingFallback>
+    <Separator class="m-0 h-px p-0" />
+    <StreamingFallback>
+      <MainContentSkeleton slot="fallback" />
+      <MainContentAsync page={page} id={id} query={query!} slot="content" />
+    </StreamingFallback>
+    <Separator class="m-0 h-px p-0" />
+  </div>
+  <div class="fixed bottom-0 right-0 w-9/12 bg-light-100">
+    <SearchToggle data-open={open} />
+    {
+      open === "true" && (
+        <StreamingFallback>
+          <SearchTableSkeleton slot="fallback" />
+          <SearchTable
+            slot="content"
+            {...(Object.fromEntries(
+              searchParams,
+            ) as unknown as SearchParamsProps)}
+          />
+        </StreamingFallback>
+      )
+    }
+  </div>
+</Layout>
+
+<!-- TODO: try to navigate without scroll to top -->
+<script>
+  const form = document.getElementById("table-of-content") as HTMLFormElement;
+
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const clickedAction = event.submitter as HTMLButtonElement;
+    const input = form.querySelector("input");
+    input?.setAttribute("value", clickedAction.getAttribute("data-value")!);
+
+    form.submit();
+  });
+</script>
+
+<style>
+  @font-face {
+    font-family: "LPMQ Isep Misbah";
+    src: url("/lpmq.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>

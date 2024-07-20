@@ -27,9 +27,15 @@ class Modal extends HTMLElement {
     this.toggleButton.removeEventListener("click", this.toggle);
   }
 
+  esc = (event: KeyboardEvent) => {
+    if (event.key === "Escape" || event.keyCode == 27) {
+      this.dismissModal();
+    }
+  };
+
   toggle = () => {
-    this.toggleButton.disabled=true
-    this.toggleButton.setAttribute('aria-disabled', "true")
+    this.toggleButton.disabled = true;
+    this.toggleButton.setAttribute("aria-disabled", "true");
     const content = this.originalChildren as HTMLElement;
 
     if (this.isFirstToggle && this.dataset.display) {
@@ -40,20 +46,29 @@ class Modal extends HTMLElement {
     content.classList.remove("hidden");
     content.setAttribute("tabindex", "-1");
     document.body.insertAdjacentHTML("beforeend", overlay);
-    document.body.insertAdjacentElement("beforeend", content);
+    const modalPopup = document.body.insertAdjacentElement(
+      "beforeend",
+      content,
+    ) as HTMLElement;
     trapFocus(content);
 
-    content.querySelector("input")?.focus();
+    (content.querySelector("input") as HTMLInputElement).focus();
     this.closeButton = document.body.querySelector(
       "button#close-button",
     ) as HTMLButtonElement;
     this.closeButton.addEventListener("click", this.dismissModal);
+    modalPopup?.previousElementSibling?.addEventListener(
+      "click",
+      this.dismissModal,
+    );
+    window.addEventListener("keydown", this.esc);
   };
 
   dismissModal = () => {
-    this.toggleButton.disabled=false
-    this.toggleButton.removeAttribute('aria-disabled')
+    this.toggleButton.disabled = false;
+    this.toggleButton.removeAttribute("aria-disabled");
     this.closeButton?.removeEventListener("click", this.dismissModal);
+    window.removeEventListener("keydown", this.esc);
     document.body.removeChild(document.body.lastElementChild!);
     document.body.removeChild(document.body.lastElementChild!);
   };

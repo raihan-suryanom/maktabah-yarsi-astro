@@ -1,0 +1,23 @@
+---
+import Separator from "../Separator.astro";
+import Skeleton from "../Skeleton.astro";
+---
+
+<nav class="overflow-x-auto capitalize">
+  <ul class="flex items-center gap-2.5">
+    <li class="flex h-6 items-center gap-2.5">
+      <p
+        class="whitespace-nowrap hover:underline hover:decoration-primary-light hover:decoration-2 hover:underline-offset-1 dark:hover:decoration-primary-dark"
+      >
+        Halaman Utama
+      </p>
+      <Separator
+        orientation="vertical"
+        class="w-0.5 rotate-12 opacity-70 dark:bg-slate-500"
+      />
+    </li>
+    <li class="flex h-6 items-center gap-2.5">
+      <Skeleton class="h-6 w-20" />
+    </li>
+  </ul>
+</nav>

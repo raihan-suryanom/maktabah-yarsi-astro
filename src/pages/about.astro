@@ -1,4 +1,7 @@
 ---
+import LoadingIndicator from "astro-loading-indicator/component";
+import { ViewTransitions } from "astro:transitions";
+
 import Breadcrumb from "~/components/Breadcrumb.astro";
 import Layout from "~/layouts/Layout.astro";
 
@@ -38,6 +41,8 @@ const urlMeta = `${import.meta.env.SITE}/about`;
       property="twitter:image"
       content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
     />
+    <ViewTransitions />
+    <LoadingIndicator color="#10b981" height="3px" />
   </Fragment>
   <div class="flex flex-col gap-8 px-8 py-5">
     <Breadcrumb paths={[{ title: "about" }]} />

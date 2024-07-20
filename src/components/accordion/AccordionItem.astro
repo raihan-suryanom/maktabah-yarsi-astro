@@ -1,7 +1,8 @@
 ---
-import { cn } from "~/lib/utils/cn";
+import { Icon } from "astro-icon/components";
 
-import Summary from "./Summary.astro";
+import { cn } from "~/lib/utils/cn";
+import { reverseSlugCaseToOriginal } from "~/lib/utils/helper";
 
 import type { CategoryProps, TOCProps } from "~/lib/utils/index.type";
 
@@ -10,33 +11,68 @@ type Props = {
   variant: "tableOfContents" | "categories";
   activeItem: string;
   open?: boolean;
+  isServer: boolean;
   class?: string;
 };
 
-const { item, variant, activeItem, open, class: className } = Astro.props;
+const {
+  item,
+  variant,
+  activeItem,
+  open,
+  isServer,
+  class: className,
+} = Astro.props;
 const hasChildren = item.children && item.children.length > 0;
+
+const Action = isServer ? "button" : "a";
+
+const pageControlProps: any = (page: string) => ({
+  ...(isServer
+    ? { type: "submit", "data-value": page.split("/").pop() }
+    : {
+        href: page,
+        "data-astro-prefetch": "hover",
+      }),
+});
 ---
 
 {
   !hasChildren ? (
-    <a
-      href={item.path}
+    <Action
+      {...pageControlProps(item.path)}
       class={cn(
         "inline-block w-full rounded-md p-[0.3em_0.5em] text-left text-sm capitalize hover:text-dark-100 dark:hover:text-light-400",
         ((item as TOCProps).page === +activeItem ||
           (item as CategoryProps)._id === activeItem) &&
           "text-primary-light hover:text-primary-light dark:text-primary-dark dark:hover:text-primary-dark",
       )}
-      data-astro-prefetch
     >
       <span>{item.title}</span>
-    </a>
+    </Action>
   ) : (
     <details
       class={cn("[&[open]>summary>svg]:rotate-90", className)}
       open={open}
     >
-      <Summary item={item} variant={variant} />
+      <summary class="flex justify-between py-1 font-semibold capitalize leading-snug text-dark-100 dark:text-light-400">
+        {variant === "tableOfContents" ? (
+          <Action
+            {...pageControlProps(item.path)}
+            class="inline w-auto text-left leading-snug hover:text-dark-100 dark:hover:text-light-400"
+          >
+            {item.title}
+          </Action>
+        ) : (
+          reverseSlugCaseToOriginal(item.title)
+        )}
+        <Icon
+          name="lucide:chevron-right"
+          class="ml-auto shrink-0 text-primary-light transition-transform duration-200 dark:text-primary-dark [&_path]:stroke-[2.5]"
+          size={20}
+        />
+      </summary>
+
       {hasChildren && (
         <ul class="border-l border-dotted border-[#e5e5e5] pl-4 dark:border-dark-300">
           {item.children.map((child) => (
@@ -47,6 +83,7 @@ const hasChildren = item.children && item.children.length > 0;
                 open={open}
                 class={className}
                 activeItem={activeItem}
+                isServer={isServer}
               />
             </li>
           ))}

@@ -13,10 +13,26 @@ type Props = {
   outlines: ReadonlyArray<CategoryProps> | ReadonlyArray<TOCProps>;
   variant: "tableOfContents" | "categories";
   activeItem: string;
+  query?: string;
   open?: boolean;
 };
 
-const { outlines, ...props } = Astro.props;
+const { outlines, query, ...props } = Astro.props;
+
+const isServer = Boolean(query);
+
+const Action = isServer ? "button" : "a";
+
+const pageControlProps: any = (page: string) => ({
+  class:
+    "py-1 text-left font-semibold leading-snug text-dark-100 dark:text-light-400",
+  ...(isServer
+    ? { type: "submit", "data-value": page.split("/").pop() }
+    : {
+        href: page,
+        "data-astro-prefetch": "hover",
+      }),
+});
 
 const data =
   props.variant === "tableOfContents"
@@ -27,15 +43,11 @@ const data =
 {
   data.map((item) =>
     item.children && item.children.length > 0 ? (
-      <AccordionItem item={item} {...props} />
+      <AccordionItem item={item} isServer={isServer} {...props} />
     ) : (
-      <a
-        href={item.path}
-        class="py-1 text-left font-semibold leading-snug text-dark-100 dark:text-light-400"
-        data-astro-prefetch
-      >
+      <Action {...pageControlProps(item.path)}>
         <span>{reverseSlugCaseToOriginal(item.title)}</span>
-      </a>
+      </Action>
     ),
   )
 }

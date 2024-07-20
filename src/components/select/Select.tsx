@@ -2,7 +2,6 @@ import { useEffect, useId, useState } from "react";
 
 import SelectComponent from "react-select";
 
-import { type Props as P } from "../input/Input.astro";
 import { inputStyles } from "../input/input.style";
 import { selectBaseStyles } from "./select.styles";
 

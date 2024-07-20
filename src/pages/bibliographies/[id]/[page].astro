@@ -1,5 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
+import LoadingIndicator from "astro-loading-indicator/component";
+import { ViewTransitions } from "astro:transitions";
 
 import AccordionList from "~/components/accordion/AccordionList.astro";
 import Breadcrumb from "~/components/Breadcrumb.astro";
@@ -58,6 +60,9 @@ const imageMeta =
     <meta property="twitter:title" content={titleMeta} />
     <meta property="twitter:description" content={descriptionMeta} />
     <meta property="twitter:image" content={imageMeta} />
+
+    <ViewTransitions />
+    <LoadingIndicator color="#10b981" height="3px" />
   </Fragment>
   <aside
     class="fixed flex h-screen w-3/12 flex-col gap-3 overflow-y-scroll border-r border-black/10 pb-28 pl-8 pr-5 pt-5 dark:border-gray-800"
