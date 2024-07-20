@@ -1,0 +1,83 @@
+---
+import configServer from "~/lib/config.server";
+import { getSearchResults } from "~/lib/search.server";
+import { strategy, wait } from "~/lib/utils/helper";
+
+import searchMock from "../../fixtures/search.json";
+import PageControl from "../PageControl.astro";
+import TableBody from "../table/TableBody.astro";
+import TableCaption from "../table/TableCaption.astro";
+import TableCell from "../table/TableCell.astro";
+import TableHead from "../table/TableHead.astro";
+import TableHeader from "../table/TableHeader.astro";
+import TableRoot from "../table/TableRoot.astro";
+import TableRow from "../table/TableRow.astro";
+
+import type { SearchProps } from "~/lib/search.server";
+import type { SearchParamsProps } from "~/lib/utils/index.type";
+
+type Props = SearchParamsProps & { page: string };
+
+const props = Astro.props;
+
+const { data, totalResult } = import.meta.env.DEV
+  ? await (searchMock as unknown as Promise<SearchProps>)
+  : await getSearchResults({
+      keyword: props.query,
+      page: props.entry,
+      bibliographies: props.bibliography ? [props.bibliography] : [],
+      categories: props.category ? [props.category] : [],
+      strategy: strategy(!!props.case_sensitive, !!props.exact_match),
+    });
+
+const totalPagination = Math.ceil(totalResult / +configServer.path.searchLimit);
+---
+
+<form id="search-table" action="/api/search" method="post">
+  <p
+    class="absolute -top-7 left-0 bg-light-100 pl-4 text-left text-dark-100 dark:bg-dark-100 dark:text-light-100"
+  >
+    <strong class="mr-1 text-lg text-primary-light dark:text-primary-dark">
+      {totalResult}
+    </strong>{" "}
+    hasil ditemukan
+  </p>
+  <input name="id" type="hidden" hidden aria-hidden="true" class="hidden" />
+  <input name="page" type="hidden" hidden aria-hidden="true" class="hidden" />
+  <TableRoot class="relative w-full table-fixed bg-light-200 dark:bg-dark-200">
+    <TableCaption class="relative border-t bg-light-200 pb-20 dark:bg-dark-200">
+      <p
+        class="bg-light-200 pl-4 pt-3 text-left dark:bg-dark-200 [&>strong]:text-lg [&>strong]:text-primary-light [&>strong]:dark:text-primary-dark"
+      >
+        Halaman <strong>{props.entry}</strong> dari{" "}
+        <strong>{totalPagination}</strong>
+      </p>
+    </TableCaption>
+    <TableHeader class="w-full">
+      <TableRow class="pointer-events-none">
+        <TableHead class="w-14">No.</TableHead>
+        <TableHead class="w-14">Hlm.</TableHead>
+        <TableHead class="w-2/3">Kueri Relevan</TableHead>
+        <TableHead class="w-1/3">Judul Buku</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody class="pb-20">
+      {
+        data.map((item, index) => (
+          <TableRow data-bibliography={item.bibliography} data-page={item.page}>
+            <TableCell>{++index + (+props.page - 1) * 5}</TableCell>
+            <TableCell>{item.page}</TableCell>
+            <TableCell class="text-left" innerHTML={item.highlight} />
+            <TableCell class="text-center">{item.title}</TableCell>
+          </TableRow>
+        ))
+      }
+    </TableBody>
+  </TableRoot>
+</form>
+<PageControl
+  class="fixed bottom-2.5 left-1/2 translate-x-[20%] rounded-md bg-light-100 px-3.5 py-1.5 dark:bg-dark-100"
+  currentPage={props.entry}
+  lastPage={totalPagination}
+  name="entry"
+/>

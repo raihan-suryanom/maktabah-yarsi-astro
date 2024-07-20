@@ -1,6 +1,6 @@
 ---
 type Props = {
-  content: string | Promise<string>;
+  content: string;
   query?: string;
 };
 
@@ -14,7 +14,7 @@ const highlightedWords = (text: string) => {
 
   const regex = new RegExp(escapedText, "gium");
 
-  return (content as string)
+  return content
     .replace(regex, (highlight) => `<mark>${highlight}</mark>`)
     .replace(/  +/g, " ");
 };

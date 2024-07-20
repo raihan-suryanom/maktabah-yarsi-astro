@@ -1,0 +1,49 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { cn } from "~/lib/utils/cn";
+
+import Button from "../Button.astro";
+
+import type { Props as ButtonProps } from "../Button.astro";
+
+export type Props = ButtonProps & {
+  placeholder?: string;
+  display?:
+    | "block"
+    | "inline-block"
+    | "inline"
+    | "flex"
+    | "flex-inline"
+    | "grid"
+    | "inline-grid"
+    | "contents";
+};
+
+const {
+  display,
+  size = "medium",
+  variant = "secondary",
+  class: className,
+  placeholder = "Cari topik yang lain...",
+} = Astro.props;
+---
+
+<script src="./Modal.ts"></script>
+
+<modal-popup class={className} data-display={display}>
+  <Button
+    role="switch"
+    tabindex={0}
+    size={size}
+    variant={variant}
+    class={cn("justify-between font-normal", className)}
+  >
+    <span class="font-normal opacity-50">{placeholder}</span>
+    <Icon
+      name="lucide:search"
+      class="text-primary-light dark:text-primary-dark [&_g]:stroke-[3]"
+    />
+  </Button>
+  <slot />
+</modal-popup>

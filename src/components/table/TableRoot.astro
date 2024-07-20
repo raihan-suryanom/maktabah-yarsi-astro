@@ -1,0 +1,15 @@
+---
+import { cn } from "~/lib/utils/cn";
+
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"table">;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<div class="relative max-h-[50vh] w-full overflow-auto">
+  <table class={cn("w-full caption-bottom text-sm", className)} {...props}>
+    <slot />
+  </table>
+</div>

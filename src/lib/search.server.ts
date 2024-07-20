@@ -2,6 +2,12 @@ import configServer from "./config.server";
 
 import type { SearchResultProps } from "./utils/index.type";
 
+export type SearchProps = {
+  totalResult: number;
+  data: SearchResultProps[];
+  error?: boolean;
+};
+
 const {
   path: { baseUrl, search, searchLimit },
 } = configServer;
@@ -18,11 +24,7 @@ export const getSearchResults = ({
   strategy: string;
   categories: FormDataEntryValue[] | string;
   bibliographies: FormDataEntryValue[] | string;
-}): Promise<{
-  totalResult: number;
-  data: SearchResultProps[];
-  error?: boolean;
-}> =>
+}): Promise<SearchProps> =>
   fetch(`${baseUrl}${search}`, {
     method: "POST",
     headers: {

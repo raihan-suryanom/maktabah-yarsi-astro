@@ -13,10 +13,7 @@ export default defineConfig({
     // TODO: experiment to on-demand ISR
     isr: {
       bypassToken: "EBPUjYLtnmlJSKpUPMRrpUtVOVfpajKM",
-      exclude: [
-        "/search",
-        "/api/search",
-      ],
+      exclude: ["/search", "/api/search"],
     },
   }),
   prefetch: true,
@@ -33,9 +30,11 @@ export default defineConfig({
           "chevrons-right",
           "chevron-left",
           "chevrons-left",
+          "frown",
           "layers",
           "pencil",
           "search",
+          "search-x",
           "shapes",
           "text-search",
           "x",
