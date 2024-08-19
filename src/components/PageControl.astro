@@ -77,30 +77,27 @@ const pageControlProps: any = (page: number, isDisabled: boolean) => ({
   </Action>
 </form>
 
-<script>
-  const form = document.querySelectorAll(
-    "form.page-control",
-  ) as NodeListOf<HTMLFormElement>;
-
-  form.forEach((pageControl) => {
+<script is:inline>
+  document.querySelectorAll("form.page-control").forEach((pageControl) => {
     const input = pageControl.querySelector("input");
 
     if (Boolean(input?.getAttribute("name"))) {
-      const actions = pageControl.querySelectorAll(
-        "button",
-      ) as NodeListOf<HTMLButtonElement>;
+      const actions = pageControl.querySelectorAll("button");
 
-      actions?.forEach((action) =>
-        action.addEventListener("click", (event) => {
-          event.preventDefault();
-          event.stopPropagation();
+      actions?.forEach((action) => {
+        if (!Boolean(action.getAttribute("data-listener"))) {
+          action.setAttribute("data-listener", "true");
+          action.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
 
-          const targettedValue = action?.getAttribute("data-value") as string;
-          input?.setAttribute("value", targettedValue);
+            const targettedValue = action?.getAttribute("data-value");
+            input?.setAttribute("value", targettedValue);
 
-          pageControl.submit();
-        }),
-      );
+            pageControl.submit();
+          });
+        }
+      });
     }
   });
 </script>

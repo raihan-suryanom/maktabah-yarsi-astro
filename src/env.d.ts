@@ -1,3 +1,5 @@
+/// <reference path="../.astro/types.d.ts" />
+/// <reference path="../.astro/env.d.ts" />
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
@@ -12,4 +14,11 @@ interface ImportMetaEnv {
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
+}
+
+namespace App {
+  interface Locals {
+    // This will allow us to set the cache duration for each page.
+    cache(seconds: number): void;
+  }
 }

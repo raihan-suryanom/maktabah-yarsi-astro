@@ -1,31 +1,40 @@
 ---
 import { Icon } from "astro-icon/components";
-import LoadingIndicator from "astro-loading-indicator/component";
-import { ViewTransitions } from "astro:transitions";
 
-import AccordionList from "~/components/accordion/AccordionList.astro";
+import MainContentAsync from "~/components/async/MainContentAsync.astro";
+import TableOfContentAsync from "~/components/async/TableOfContentAsync.astro";
 import Breadcrumb from "~/components/Breadcrumb.astro";
 import CardFooter from "~/components/card/CardFooter.astro";
 import CardHeader from "~/components/card/CardHeader.astro";
 import CardRoot from "~/components/card/CardRoot.astro";
 import CardTitle from "~/components/card/CardTitle.astro";
-import MainContent from "~/components/MainContent.astro";
 import PageControl from "~/components/PageControl.astro";
 import SearchForm from "~/components/search/SearchForm.astro";
 import Separator from "~/components/Separator.astro";
 import Layout from "~/layouts/Layout.astro";
-import { getAllBibliographies } from "~/lib/bibliographies.server";
-import { extractContentBibliographyPaths } from "~/lib/utils/extractCategoryPaths";
+import { getDetailBibliography } from "~/lib/bibliographies.server";
 import { formateDate, reverseSlugCaseToOriginal } from "~/lib/utils/helper";
+import Time from "~/lib/utils/time";
 
-export const getStaticPaths = async () => {
-  const bibliographies = await getAllBibliographies();
-
-  return await extractContentBibliographyPaths(bibliographies);
-};
+import type { BibliographyProps } from "~/lib/utils/index.type";
 
 const { id, page } = Astro.params;
-const bibliography = Astro.props;
+
+let bibliography: BibliographyProps;
+
+try {
+  bibliography = await getDetailBibliography(id as string);
+
+  if (!Boolean(bibliography._id)) {
+    throw Error();
+  }
+} catch (_) {
+  return Astro.redirect("/404");
+}
+
+Astro.locals.cache(Time.minutes(1));
+
+// TODO: fix this imageMeta Url
 const titleMeta = `${bibliography.title} - ${reverseSlugCaseToOriginal(bibliography.subject)}`;
 const descriptionMeta = bibliography.description;
 const urlMeta = `${import.meta.env.SITE}${import.meta.env.PUBLIC_BIBLIOGRAPHIES_API}/${id}/${page}`;
@@ -60,19 +69,13 @@ const imageMeta =
     <meta property="twitter:title" content={titleMeta} />
     <meta property="twitter:description" content={descriptionMeta} />
     <meta property="twitter:image" content={imageMeta} />
-
-    <ViewTransitions />
-    <LoadingIndicator color="#10b981" height="3px" />
   </Fragment>
   <aside
     class="fixed flex h-screen w-3/12 flex-col gap-3 overflow-y-scroll border-r border-black/10 pb-28 pl-8 pr-5 pt-5 dark:border-gray-800"
   >
-    <AccordionList
-      outlines={bibliography.toc}
-      variant="tableOfContents"
-      activeItem={page}
-      open
-    />
+    <TableOfContentAsync id={id!} page={page!} server:defer>
+      <p slot="fallback">Sedang memuat daftar isi...</p>
+    </TableOfContentAsync>
   </aside>
   <div class="ml-auto flex w-9/12 flex-col gap-5 px-8 pb-20 pt-5">
     <div class="flex justify-between">
@@ -118,12 +121,13 @@ const imageMeta =
     <PageControl
       bibliographyId={bibliography._id}
       firstPage={bibliography.firstPage}
-      currentPage={page}
+      currentPage={page as string}
       lastPage={bibliography.lastPage}
     />
-
     <Separator class="m-0 h-px p-0" />
-    <MainContent content={bibliography.text} />
+    <MainContentAsync id={id!} page={page!} server:defer>
+      <p slot="fallback" class="min-h-screen">Sedang memuat konten buku...</p>
+    </MainContentAsync>
     <Separator class="m-0 h-px p-0" />
   </div>
 </Layout>

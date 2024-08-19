@@ -1,13 +1,8 @@
 ---
 import { Icon } from "astro-icon/components";
 
-import bibliographyMock from "~/fixtures/bibliography.json";
 import { getDetailBibliography } from "~/lib/bibliographies.server";
-import {
-  formateDate,
-  reverseSlugCaseToOriginal,
-  wait,
-} from "~/lib/utils/helper";
+import { formateDate, reverseSlugCaseToOriginal } from "~/lib/utils/helper";
 
 import Breadcrumb from "../Breadcrumb.astro";
 import CardFooter from "../card/CardFooter.astro";
@@ -17,8 +12,6 @@ import CardTitle from "../card/CardTitle.astro";
 import PageControl from "../PageControl.astro";
 import SearchForm from "../search/SearchForm.astro";
 
-import type { BibliographyProps } from "~/lib/utils/index.type";
-
 type Props = {
   id: string;
   page: string;
@@ -26,9 +19,7 @@ type Props = {
 
 const { id, page } = Astro.props;
 
-const bibliography = import.meta.env.PROD
-  ? (bibliographyMock as unknown as BibliographyProps)
-  : await getDetailBibliography(id);
+const bibliography = await getDetailBibliography(id);
 ---
 
 <div class="flex justify-between">

@@ -1,25 +1,26 @@
 ---
-import LoadingIndicator from "astro-loading-indicator/component";
-import { ViewTransitions } from "astro:transitions";
-
-import AccordionList from "~/components/accordion/AccordionList.astro";
-import BibliographyLists from "~/components/BibliographyLists.astro";
+import BibliographiesListAsync from "~/components/async/BibliographiesListAsync.astro";
+import CategoriesListAsync from "~/components/async/CategoriesListAsync.astro";
 import Breadcrumb from "~/components/Breadcrumb.astro";
-import PageControl from "~/components/PageControl.astro";
 import Layout from "~/layouts/Layout.astro";
-import { getCategories } from "~/lib/categories.server";
-import { extractCategoryPaths } from "~/lib/utils/extractCategoryPaths";
+import { getCategoryTitle } from "~/lib/categories.server";
 import { reverseSlugCaseToOriginal } from "~/lib/utils/helper";
-
-// TODO: implement paginate using paginate() inside param
-export const getStaticPaths = async () => {
-  const { categories } = await getCategories();
-
-  return extractCategoryPaths(categories);
-};
+import Time from "~/lib/utils/time";
 
 const { id } = Astro.params;
-const { categories, title, bibliographies } = Astro.props;
+
+let title;
+
+try {
+  title = await getCategoryTitle(id!).then((category) => category.title);
+  if (!Boolean(title)) {
+    throw Error();
+  }
+} catch (_) {
+  return Astro.redirect("/404");
+}
+
+Astro.locals.cache(Time.minutes(1, 20));
 
 const titleMeta = `Daftar Buku ${title} - Maktaba YARSI`;
 const descriptionMeta = `Berikut daftar buku kategori ${title}`;
@@ -52,20 +53,15 @@ const urlMeta = `${import.meta.env.SITE}/categories/${id}`;
       property="twitter:image"
       content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
     />
-
-    <ViewTransitions />
-    <LoadingIndicator color="#10b981" height="3px" />
   </Fragment>
   <aside
     class="fixed flex h-screen w-3/12 flex-col overflow-y-scroll border-r border-black/10 pb-28 pl-8 pr-5 pt-5 [&>div[aria-label=skeleton]]:mb-3 [&>div[aria-label=skeleton]]:ml-auto"
   >
     <h2 class="mb-3 text-2xl font-bold dark:text-light-400">Kategori Buku</h2>
-    <AccordionList
-      outlines={categories}
-      variant="categories"
-      activeItem={id}
-      open
-    />
+    <!-- TODO: Add categories list skeleton -->
+    <CategoriesListAsync activeCategory={id as string} server:defer>
+      <p slot="fallback">Sedang membuat daftar kategori...</p>
+    </CategoriesListAsync>
   </aside>
   <div
     class="relative ml-auto flex min-h-screen w-9/12 flex-col gap-7 bg-light-300 px-8 pt-5 dark:bg-dark-200"
@@ -77,25 +73,10 @@ const urlMeta = `${import.meta.env.SITE}/categories/${id}`;
     <section
       class="grid grid-rows-none gap-5 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 [&>div[aria-label=skeleton]]:rounded-[10px]"
     >
-      {/* TODO: New Pagination fallback skeleton */}
-      <BibliographyLists bibliographies={bibliographies} />
-      {
-        bibliographies.length > 0 ? (
-          // TODO: hide when there is not enough books or smaller device
-          <PageControl
-            class="fixed bottom-2.5 left-1/2 translate-x-[20%] rounded-md bg-light-100 px-3.5 py-1.5 dark:bg-dark-100"
-            currentPage="1"
-            lastPage={1}
-          />
-        ) : (
-          <p class="col-span-full mt-20 text-center text-lg [&>span]:font-semibold [&>span]:text-primary-light [&>span]:dark:text-primary-dark">
-            Maaf, kategori yang dipilih saat ini <span>sedang kosong</span>. Tim
-            kami sedang bekerja keras untuk menambahkan buku ke kategori ini.
-            Silakan <span>cek kembali</span> nanti untuk pembaruan. Terima kasih
-            atas kesabaran dan pengertiannya.
-          </p>
-        )
-      }
+      <!-- TODO: Add Pagination and Bibliographies fallback skeleton -->
+      <BibliographiesListAsync categoryId={id as string} server:defer>
+        <p slot="fallback">Sedang membuat daftar buku...</p>
+      </BibliographiesListAsync>
     </section>
   </div>
 </Layout>

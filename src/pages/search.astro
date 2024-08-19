@@ -2,18 +2,15 @@
 import BibliographyDetailsAsync from "~/components/async/BibliographyDetailsAsync.astro";
 import MainContentAsync from "~/components/async/MainContentAsync.astro";
 import TableOfContentAsync from "~/components/async/TableOfContentAsync.astro";
-import SearchTable from "~/components/search/SearchTable.astro";
+import SearchTableAsync from "~/components/search/SearchTableAsync.astro";
 import SearchToggle from "~/components/search/SearchToggle.astro";
 import Separator from "~/components/Separator.astro";
 import BibliographyDetailsSkeleton from "~/components/skeleton/BibliographyDetailsSkeleton.astro";
 import MainContentSkeleton from "~/components/skeleton/MainContentSkeleton.astro";
 import SearchTableSkeleton from "~/components/skeleton/SearchTableSkeleton.astro";
-import StreamingFallback from "~/components/StreamingFallback.astro";
 import Layout from "~/layouts/Layout.astro";
 
 import type { SearchParamsProps } from "~/lib/utils/index.type";
-
-export const prerender = false;
 
 const { searchParams } = Astro.url;
 
@@ -51,56 +48,56 @@ if (!page || !id) {
         class="hidden"
       />
       <!-- TODO: refactor to toggleable TOC -->
-      <StreamingFallback>
+      <!-- TODO: Add TOC Skeleton heyy! -->
+      <TableOfContentAsync id={id} page={page} query="page" server:defer>
         <MainContentSkeleton slot="fallback" />
-        <TableOfContentAsync id={id} page={page} slot="content" />
-      </StreamingFallback>
+      </TableOfContentAsync>
     </form>
   </aside>
   <div class="ml-auto flex w-9/12 flex-col gap-5 px-8 pb-20 pt-5">
-    <StreamingFallback>
+    <BibliographyDetailsAsync id={id} page={page} server:defer>
       <BibliographyDetailsSkeleton slot="fallback" />
-      <BibliographyDetailsAsync page={page} id={id} slot="content" />
-    </StreamingFallback>
+    </BibliographyDetailsAsync>
     <Separator class="m-0 h-px p-0" />
-    <StreamingFallback>
+    <MainContentAsync id={id} page={page} query={query!} server:defer>
       <MainContentSkeleton slot="fallback" />
-      <MainContentAsync page={page} id={id} query={query!} slot="content" />
-    </StreamingFallback>
+    </MainContentAsync>
     <Separator class="m-0 h-px p-0" />
   </div>
   <div class="fixed bottom-0 right-0 w-9/12 bg-light-100">
     <SearchToggle data-open={open} />
     {
       open === "true" && (
-        <StreamingFallback>
+        <SearchTableAsync
+          {...(Object.fromEntries(
+            searchParams,
+          ) as unknown as SearchParamsProps)}
+          server:defer
+        >
           <SearchTableSkeleton slot="fallback" />
-          <SearchTable
-            slot="content"
-            {...(Object.fromEntries(
-              searchParams,
-            ) as unknown as SearchParamsProps)}
-          />
-        </StreamingFallback>
+        </SearchTableAsync>
       )
     }
   </div>
 </Layout>
 
 <!-- TODO: try to navigate without scroll to top -->
-<script>
-  const form = document.getElementById("table-of-content") as HTMLFormElement;
+<!-- TODO: use server actions(IMPORTANT!)-->
+<script is:inline>
+  document
+    .getElementById("table-of-content")
+    ?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
 
-  form?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    event.stopPropagation();
+      const clickedAction = event.submitter;
+      const input = document
+        .getElementById("table-of-content")
+        .querySelector("input");
+      input?.setAttribute("value", clickedAction.getAttribute("data-value"));
 
-    const clickedAction = event.submitter as HTMLButtonElement;
-    const input = form.querySelector("input");
-    input?.setAttribute("value", clickedAction.getAttribute("data-value")!);
-
-    form.submit();
-  });
+      document.getElementById("table-of-content").submit();
+    });
 </script>
 
 <style>

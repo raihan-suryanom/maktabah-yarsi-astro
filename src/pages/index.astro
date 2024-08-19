@@ -1,7 +1,4 @@
 ---
-import LoadingIndicator from "astro-loading-indicator/component";
-import { ViewTransitions } from "astro:transitions";
-
 import SearchForm from "~/components/search/SearchForm.astro";
 import Layout from "~/layouts/Layout.astro";
 
@@ -41,8 +38,6 @@ const urlMeta = import.meta.env.SITE;
       property="twitter:image"
       content="https://drive.google.com/file/d/1uPrp9lSriYIxYDFyXH3B6ysvV4OWvvsO/view"
     />
-    <ViewTransitions />
-    <LoadingIndicator color="#10b981" height="3px" />
   </Fragment>
   <main
     class="mx-auto flex h-[calc(100vh-64px)] flex-col items-center justify-start gap-10 pt-28 text-center lg:w-9/12"

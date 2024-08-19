@@ -1,25 +1,19 @@
 ---
 import contentMock from "~/fixtures/content.json";
 import { getContents } from "~/lib/content.server";
+import { wait } from "~/lib/utils/helper";
 
 import MainContent from "../MainContent.astro";
-import MainContentSkeleton from "../skeleton/MainContentSkeleton.astro";
-import StreamingFallback from "../StreamingFallback.astro";
 
 type Props = {
   id: string;
   page: string;
-  query: string;
+  query?: string;
 };
 
 const { id, page, query } = Astro.props;
 
-const text = import.meta.env.PROD
-  ? contentMock
-  : await getContents(id, page).then((content) => content.text);
+const text = await getContents(id, page).then((content) => content.text);
 ---
 
-<StreamingFallback>
-  <MainContentSkeleton slot="fallback" />
-  <MainContent query={query} content={text} slot="content" />
-</StreamingFallback>
+<MainContent query={query} content={text} />

@@ -1,4 +1,6 @@
 ---
+import Layout from "~/layouts/Layout.astro";
+
 interface Props {
   error: unknown;
 }
@@ -6,10 +8,12 @@ interface Props {
 const { error } = Astro.props;
 ---
 
-<div>
-  {
-    error instanceof Error
-      ? error.message
-      : "Terjadi suatu kesalahan atau internet Anda sedang mati!"
-  }
-</div>
+<Layout>
+  <div class="mx-auto my-auto flex w-full flex-col gap-y-4 py-20 text-center">
+    {
+      error instanceof Error
+        ? error.message
+        : "Terjadi suatu kesalahan atau internet Anda sedang mati!"
+    }
+  </div>
+</Layout>

@@ -1,27 +1,27 @@
 ---
-import tocMock from "~/fixtures/toc.json";
 import { getTableOfContents } from "~/lib/bibliographies.server";
 
 import AccordionList from "../accordion/AccordionList.astro";
 
-import type { TOCProps } from "~/lib/utils/index.type";
-
 type Props = {
   id: string;
   page: string;
+  query?: string;
 };
 
-const { id, page } = Astro.props;
+const { id, page, query } = Astro.props;
 
-const tableOfContents = import.meta.env.PROD
-  ? (tocMock as unknown as readonly TOCProps[])
-  : await getTableOfContents(id);
+const tableOfContents = await getTableOfContents(id);
+
+const tocProps = (query: string | undefined) => ({
+  ...(query && { query }),
+});
 ---
 
 <AccordionList
+  {...tocProps(query)}
   outlines={tableOfContents}
   variant="tableOfContents"
   activeItem={page}
-  query="page"
   open
 />

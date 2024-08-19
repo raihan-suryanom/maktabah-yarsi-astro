@@ -19,26 +19,26 @@ const { class: className, ...props } = Astro.props;
 </tr>
 
 <!-- TODO: try to do it without scripts so we can remove this -->
-<script>
-  const form = document.getElementById("search-table") as HTMLFormElement;
+<script is:inline>
+  document
+    .getElementById("search-table")
+    ?.querySelectorAll("tbody > tr")
+    ?.forEach((tr) => {
+      if (!Boolean(tr.getAttribute("data-listener"))) {
+        tr.setAttribute("data-listener", "true");
+        tr.addEventListener("click", () => {
+          const id = document
+            .getElementById("search-table")
+            ?.querySelector("input[type=hidden][name=id]");
+          const page = document
+            .getElementById("search-table")
+            ?.querySelector("input[type=hidden][name=page]");
 
-  const tableRows = form?.querySelectorAll(
-    "tbody > tr",
-  ) as NodeListOf<HTMLTableRowElement>;
+          id.setAttribute("value", tr.getAttribute("data-bibliography"));
+          page.setAttribute("value", tr.getAttribute("data-page"));
 
-  tableRows?.forEach((tr) =>
-    tr.addEventListener("click", () => {
-      const id = form?.querySelector(
-        "input[type=hidden][name=id]",
-      ) as HTMLInputElement;
-      const page = form?.querySelector(
-        "input[type=hidden][name=page]",
-      ) as HTMLInputElement;
-
-      id.setAttribute("value", tr.getAttribute("data-bibliography") as string);
-      page.setAttribute("value", tr.getAttribute("data-page") as string);
-
-      form.submit();
-    }),
-  );
+          document.getElementById("search-table").submit();
+        });
+      }
+    });
 </script>

@@ -26,28 +26,28 @@ const lightIcon = `
   <Skeleton class="inline-block h-6 w-6 rounded-full" />
 </button>
 
+<!-- TODO: please make this logic of code cleaner if possible -->
 <script define:vars={{ darkIcon, lightIcon }} is:inline>
-  const button = document.querySelector("button");
-  const theme = localStorage.getItem("theme") ?? "dark";
-  button.innerHTML = theme === "dark" ? darkIcon : lightIcon;
+  const themeToggler = () => {
+    const button = document.querySelector("button");
+    const theme = localStorage.getItem("theme") ?? "dark";
+    button.innerHTML = theme === "dark" ? darkIcon : lightIcon;
 
-  const toggleTheme = () => {
-    const currentTheme = localStorage.getItem("theme");
-    if (currentTheme === "dark") {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    }
-    button.innerHTML = currentTheme === "light" ? darkIcon : lightIcon;
+    const toggleTheme = () => {
+      const currentTheme = localStorage.getItem("theme");
+      if (currentTheme === "dark") {
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+      } else {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+      }
+      button.innerHTML = currentTheme === "light" ? darkIcon : lightIcon;
+    };
+
+    button.addEventListener("click", toggleTheme);
   };
 
-  // TODO: please make this logic of code cleaner
-  button.addEventListener("click", toggleTheme);
-  document.addEventListener("astro:after-swap", () => {
-    const button = document.querySelector("button");
-    button.innerHTML =
-      localStorage.getItem("theme") === "dark" ? darkIcon : lightIcon;
-  });
+  themeToggler();
+  document.addEventListener("astro:after-swap", themeToggler);
 </script>

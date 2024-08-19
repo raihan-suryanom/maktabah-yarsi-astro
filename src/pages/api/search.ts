@@ -6,8 +6,6 @@ import stringToFormData from "~/lib/utils/stringToFormData";
 
 import type { APIRoute } from "astro";
 
-export const prerender = false;
-
 export const POST: APIRoute = async ({ request, redirect }) => {
   try {
     const formData = await request.formData();
@@ -48,7 +46,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       data.append("open", "true");
     }
 
-    const searchResults = import.meta.env.DEV
+    const searchResults = import.meta.env.PROD
       ? await getSearchResults({
           keyword: data.get("query")!.toString(),
           page: data.get("entry")!.toString(),

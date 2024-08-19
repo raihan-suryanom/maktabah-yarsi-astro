@@ -3,21 +3,21 @@ import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 
 import coverNotFound from "~/assets/images/book-cover-not-available.png";
+import { getBibliographies } from "~/lib/bibliographies.server";
 import { generateBibliographyPaths } from "~/lib/utils/generatePaths";
 
-import CardFooter from "./card/CardFooter.astro";
-import CardRoot from "./card/CardRoot.astro";
-import CardTitle from "./card/CardTitle.astro";
-
-import type { BibliographyProps } from "~/lib/utils/index.type";
+import CardFooter from "../card/CardFooter.astro";
+import CardRoot from "../card/CardRoot.astro";
+import CardTitle from "../card/CardTitle.astro";
+import PageControl from "../PageControl.astro";
 
 type Props = {
-  bibliographies: ReadonlyArray<BibliographyProps>;
+  categoryId: string;
 };
 
-const formattedBibliographies = generateBibliographyPaths(
-  Astro.props.bibliographies,
-);
+const { bibliographies } = await getBibliographies(Astro.props.categoryId);
+
+const formattedBibliographies = generateBibliographyPaths(bibliographies);
 ---
 
 {
@@ -44,4 +44,21 @@ const formattedBibliographies = generateBibliographyPaths(
       </CardFooter>
     </CardRoot>
   ))
+}
+{
+  bibliographies.length > 0 ? (
+    // TODO: hide when there is not enough books or smaller device
+    <PageControl
+      class="fixed bottom-2.5 left-1/2 translate-x-[20%] rounded-md bg-light-100 px-3.5 py-1.5 dark:bg-dark-100"
+      currentPage="1"
+      lastPage={1}
+    />
+  ) : (
+    <p class="col-span-full mt-20 text-center text-lg [&>span]:font-semibold [&>span]:text-primary-light [&>span]:dark:text-primary-dark">
+      Maaf, kategori yang dipilih saat ini <span>sedang kosong</span>. Tim kami
+      sedang bekerja keras untuk menambahkan buku ke kategori ini. Silakan{" "}
+      <span>cek kembali</span> nanti untuk pembaruan. Terima kasih atas
+      kesabaran dan pengertiannya.
+    </p>
+  )
 }

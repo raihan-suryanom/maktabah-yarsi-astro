@@ -21,14 +21,14 @@ type Props = SearchParamsProps & { page: string };
 const props = Astro.props;
 
 const { data, totalResult } = import.meta.env.PROD
-  ? await (searchMock as unknown as Promise<SearchProps>)
-  : await getSearchResults({
+  ? await getSearchResults({
       keyword: props.query,
       page: props.entry,
       bibliographies: props.bibliography ? [props.bibliography] : [],
       categories: props.category ? [props.category] : [],
       strategy: strategy(!!props.case_sensitive, !!props.exact_match),
-    });
+    })
+  : await (searchMock as unknown as Promise<SearchProps>);
 
 const totalPagination = Math.ceil(totalResult / +configServer.path.searchLimit);
 ---

@@ -1,0 +1,20 @@
+---
+import { getCategories } from "~/lib/categories.server";
+
+import AccordionList from "../accordion/AccordionList.astro";
+
+type Props = {
+  activeCategory: string;
+};
+
+const { activeCategory } = Astro.props;
+
+const { categories } = await getCategories();
+---
+
+<AccordionList
+  outlines={categories}
+  variant="categories"
+  activeItem={activeCategory}
+  open
+/>
