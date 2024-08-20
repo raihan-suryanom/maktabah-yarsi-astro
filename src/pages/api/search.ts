@@ -34,8 +34,14 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     const bibliographies = data.getAll("bibliographies");
     const categories = data.getAll("categories");
 
-    if (!bibliographies.toString().length) data.delete("bibliographies");
-    if (!categories.toString().length) data.delete("categories");
+    if (!bibliographies.toString().length) {
+      data.delete("bibliographies");
+      bibliographies.pop()
+    }
+    if (!categories.toString().length) {
+      data.delete("categories");
+      categories.pop()
+    }
     if (!data.has("entry") && hasQuery) data.append("entry", "1");
     if (data.has("open")) {
       data.set(
