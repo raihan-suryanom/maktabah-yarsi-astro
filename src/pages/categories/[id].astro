@@ -5,7 +5,6 @@ import Breadcrumb from "~/components/Breadcrumb.astro";
 import Layout from "~/layouts/Layout.astro";
 import { getCategoryTitle } from "~/lib/categories.server";
 import { reverseSlugCaseToOriginal } from "~/lib/utils/helper";
-import Time from "~/lib/utils/time";
 
 const { id } = Astro.params;
 
@@ -19,8 +18,6 @@ try {
 } catch (_) {
   return Astro.redirect("/404");
 }
-
-Astro.locals.cache(Time.minutes(1, 20));
 
 const titleMeta = `Daftar Buku ${title} - Maktaba YARSI`;
 const descriptionMeta = `Berikut daftar buku kategori ${title}`;
@@ -59,7 +56,7 @@ const urlMeta = `${import.meta.env.SITE}/categories/${id}`;
   >
     <h2 class="mb-3 text-2xl font-bold dark:text-light-400">Kategori Buku</h2>
     <!-- TODO: Add categories list skeleton -->
-    <CategoriesListAsync activeCategory={id as string} server:defer>
+    <CategoriesListAsync activeCategory={id as string}>
       <p slot="fallback">Sedang membuat daftar kategori...</p>
     </CategoriesListAsync>
   </aside>
@@ -74,7 +71,7 @@ const urlMeta = `${import.meta.env.SITE}/categories/${id}`;
       class="grid grid-rows-none gap-5 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 [&>div[aria-label=skeleton]]:rounded-[10px]"
     >
       <!-- TODO: Add Pagination and Bibliographies fallback skeleton -->
-      <BibliographiesListAsync categoryId={id as string} server:defer>
+      <BibliographiesListAsync categoryId={id as string}>
         <p slot="fallback">Sedang membuat daftar buku...</p>
       </BibliographiesListAsync>
     </section>

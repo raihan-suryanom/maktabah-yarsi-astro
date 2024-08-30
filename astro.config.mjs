@@ -1,6 +1,6 @@
-import node from "@astrojs/node";
 import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
+import vercel from "@astrojs/vercel/serverless";
 import icon from "astro-icon";
 import { defineConfig, envField } from "astro/config";
 
@@ -19,8 +19,17 @@ export default defineConfig({
   // TODO: update this when ready to deploy prod
   site: "https://maktabah.yarsi.ac.id",
   output: "server",
-  adapter: node({
-    mode: "standalone",
+  adapter: vercel({
+    isr: {
+      bypassToken:
+        "ISQXiebFFxjNF2hnd6xIgHRBBxJyS1ln.J6EZSPrdIn7WDx9Iijg8n8hFs401EH8E.u8QQaMJ5uO527pD6smPSfoUMtYCaQ9Zd",
+      exclude: [
+        "/search",
+        "/api/login",
+        "/api/search",
+        "/_server-islands/ProfileAsync",
+      ],
+    },
   }),
   prefetch: true,
   integrations: [
@@ -44,6 +53,7 @@ export default defineConfig({
           "search-x",
           "shapes",
           "text-search",
+          "user",
           "x",
         ],
       },
@@ -86,6 +96,15 @@ export default defineConfig({
         PUBLIC_SEARCH_LIMIT: envField.string({
           context: "client",
           access: "public",
+        }),
+        JWT_SECRET_KEY: envField.string({
+          context: "server",
+          access: "public",
+        }),
+        LOGIN_API: envField.string({
+          context: "server",
+          access: "public",
+          startsWith: "/",
         }),
       },
       validateSecrets: true,

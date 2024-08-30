@@ -1,4 +1,4 @@
-import configServer from "./config.server";
+import configServer from "./config.client";
 
 import type { CategoryProps } from "./utils/index.type";
 

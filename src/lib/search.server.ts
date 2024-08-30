@@ -1,4 +1,4 @@
-import configServer from "./config.server";
+import configServer from "./config.client";
 
 import type { SearchResultProps } from "./utils/index.type";
 

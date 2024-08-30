@@ -1,5 +1,5 @@
 export default class Time {
-  private static readonly ONE_SECOND = 1000;
+  public static readonly ONE_SECOND = 1000;
   private static readonly ONE_MINUTE = this.ONE_SECOND * 60;
   private static readonly ONE_HOUR = this.ONE_MINUTE * 60;
   private static readonly ONE_DAY = this.ONE_HOUR * 24;

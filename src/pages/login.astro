@@ -1,0 +1,18 @@
+---
+import Button from "~/components/Button.astro";
+import Layout from "~/layouts/Layout.astro";
+---
+
+<Layout>
+  <Fragment slot="metadata">
+    <meta http-equiv="Cache-control" content="no-cache, no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+  </Fragment>
+  <form action="/api/login" method="post">
+    <label for="email" class="text-lg font-semibold"> Email </label>
+    <input type="text" name="email" />
+    <label for="password" class="text-lg font-semibold"> Password </label>
+    <input type="password" name="password" />
+    <Button type="submit">Login</Button>
+  </form>
+</Layout>

@@ -1,0 +1,48 @@
+---
+import { Icon } from "astro-icon/components";
+
+import Button from "../Button.astro";
+
+const hasLoggedIn = Astro.cookies.has("token");
+---
+
+<div class="group relative inline-block text-left" role="dialog">
+  <Button class="relative h-7 w-7 rounded-full border border-white" unstyled>
+    <Icon name="lucide:user" class="m-auto" size={20} />
+  </Button>
+  <div
+    class="absolute right-0 z-10 mt-3 hidden w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none group-focus-within:block"
+    role="menu"
+    aria-orientation="vertical"
+    aria-labelledby="menu-button"
+    tabindex="-1"
+  >
+    <div class="py-1" role="none">
+      <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+      <a
+        href="#"
+        class="block px-4 py-2 text-sm text-gray-700"
+        role="menuitem"
+        tabindex="-1"
+      >
+        Account settings</a
+      >
+      <a
+        href="/"
+        class="block px-4 py-2 text-sm text-gray-700"
+        role="menuitem"
+        tabindex="-1"
+      >
+        License</a
+      >
+      <a
+        href={hasLoggedIn ? "/logout" : "/login"}
+        class="block px-4 py-2 text-sm text-gray-700"
+        role="menuitem"
+        tabindex="-1"
+      >
+      {hasLoggedIn ? "Keluar" : "Masuk"}
+      </a>
+    </div>
+  </div>
+</div>

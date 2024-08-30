@@ -1,5 +1,5 @@
 import searchMock from "~/fixtures/search.json";
-import configServer from "~/lib/config.server";
+import configServer from "~/lib/config.client";
 import { getSearchResults } from "~/lib/search.server";
 import { strategy } from "~/lib/utils/helper";
 import stringToFormData from "~/lib/utils/stringToFormData";
@@ -36,11 +36,11 @@ export const POST: APIRoute = async ({ request, redirect }) => {
 
     if (!bibliographies.toString().length) {
       data.delete("bibliographies");
-      bibliographies.pop()
+      bibliographies.pop();
     }
     if (!categories.toString().length) {
       data.delete("categories");
-      categories.pop()
+      categories.pop();
     }
     if (!data.has("entry") && hasQuery) data.append("entry", "1");
     if (data.has("open")) {

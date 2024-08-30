@@ -1,7 +1,9 @@
 ---
 import { Icon } from "astro-icon/components";
 
+import ProfileAsync from "~/components/async/ProfileAsync.astro";
 import Separator from "~/components/Separator.astro";
+import Skeleton from "~/components/Skeleton.astro";
 import ThemeToggle from "~/components/ThemeToggle.astro";
 ---
 
@@ -47,8 +49,11 @@ import ThemeToggle from "~/components/ThemeToggle.astro";
       </li>
     </ul>
     <span class="h-6">
-      <Separator orientation="vertical" class="w-0.5 opacity-20" />
+      <Separator orientation="vertical" class="w-0.5" />
     </span>
+    <ProfileAsync server:defer>
+      <Skeleton class="h-7 w-7 rounded-full" slot="fallback" />
+    </ProfileAsync>
     <ThemeToggle />
   </nav>
 </header>
