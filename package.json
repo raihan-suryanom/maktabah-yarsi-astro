@@ -8,13 +8,13 @@
     "disable:toolbar": "astro preferences disable devToolbar",
     "build": "astro check && astro build",
     "fresh:install": "rm -rf node_modules && rm yarn.lock && yarn",
-    "preview": "yarn build && vercel deploy --prebuilt",
+    "preview": "yarn build && HOST=0.0.0.0 PORT=4321 node ./dist/server/entry.mjs",
     "astro": "astro",
     "check": "npx prettier . --check",
     "format": "npx prettier . --write"
   },
   "dependencies": {
-    "@astrojs/vercel": "7.8.0",
+    "@astrojs/node": "^8.3.3",
     "astro": "4.14.5",
     "astro-icon": "1.1.1",
     "class-variance-authority": "0.7.0",

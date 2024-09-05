@@ -1,9 +1,3 @@
-import react from "@astrojs/react";
-import tailwind from "@astrojs/tailwind";
-import vercel from "@astrojs/vercel/serverless";
-import icon from "astro-icon";
-import { defineConfig, envField } from "astro/config";
-
 // THIS IS GLOBAL LIST OF TODOS
 // TODO: handle error case for most scenarios(fetching and action)
 // TODO: Experimental: Content Layer API??
@@ -14,22 +8,19 @@ import { defineConfig, envField } from "astro/config";
 // TODO: refactor clsx to class:list Astro built-it
 // TODO: use server action instead (literally 0 js).
 
+import node from "@astrojs/node";
+import react from "@astrojs/react";
+import tailwind from "@astrojs/tailwind";
+import icon from "astro-icon";
+import { defineConfig, envField } from "astro/config";
+
 // https://astro.build/config
 export default defineConfig({
   // TODO: update this when ready to deploy prod
   site: "https://maktabah.yarsi.ac.id",
   output: "server",
-  adapter: vercel({
-    isr: {
-      bypassToken:
-        "ISQXiebFFxjNF2hnd6xIgHRBBxJyS1ln.J6EZSPrdIn7WDx9Iijg8n8hFs401EH8E.u8QQaMJ5uO527pD6smPSfoUMtYCaQ9Zd",
-      exclude: [
-        "/search",
-        "/api/login",
-        "/api/search",
-        "/_server-islands/ProfileAsync",
-      ],
-    },
+  adapter: node({
+    mode: "standalone",
   }),
   prefetch: true,
   integrations: [
